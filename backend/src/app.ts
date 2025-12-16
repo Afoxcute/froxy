@@ -26,7 +26,7 @@ app.use('/api/ip-asset-locker', ipAssetLockerRoutes);
 // Default route (optional)
 app.get('/', (_req, res) => {
   res.json({
-    message: '✅ Yakoa + Hedera + Arbitration backend is running!',
+    message: '✅ Yakoa + Cronos Testnet + Arbitration backend is running!',
     version: '1.0.0',
     endpoints: {
       register: '/api/register',

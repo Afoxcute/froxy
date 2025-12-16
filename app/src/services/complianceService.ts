@@ -1,20 +1,11 @@
 import { ThirdwebClient, getContract, prepareContractCall, readContract, sendTransaction, waitForReceipt } from "thirdweb";
-import { defineChain } from "thirdweb/chains";
 // Remove unused imports
 // import IPAssetComplianceManagerABI from "../abi/IPAssetComplianceManager.json";
 // import IPAssetManagerV2ABI from "../abi/IPAssetManagerV2.json";
 
-// Hedera Testnet configuration
-const hederaTestnet = defineChain({
-  id: 296,
-  name: "Hedera Testnet",
-  rpc: "https://testnet.hashio.io/api",
-  nativeCurrency: {
-    name: "HBAR",
-    symbol: "HBAR",
-    decimals: 8,
-  },
-});
+// Cronos Testnet configuration
+import { CRONOS_TESTNET } from "./x402PaymentService";
+const cronosTestnet = CRONOS_TESTNET;
 
 // Contract ABIs
 // Remove unused ABI imports
@@ -101,7 +92,7 @@ export class ComplianceService {
     // Initialize compliance contract
     this.complianceContract = getContract({
       address: CONTRACT_ADDRESSES.IPAssetComplianceManager as `0x${string}`,
-      chain: hederaTestnet,
+      chain: cronosTestnet,
       client: this.client,
       abi: [
         // Compliance verification
@@ -275,7 +266,7 @@ export class ComplianceService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: hederaTestnet,
+        chain: cronosTestnet,
         transactionHash: transaction.transactionHash,
       });
 
@@ -410,7 +401,7 @@ export class ComplianceService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: hederaTestnet,
+        chain: cronosTestnet,
         transactionHash: transaction.transactionHash,
       });
 
@@ -447,7 +438,7 @@ export class ComplianceService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: hederaTestnet,
+        chain: cronosTestnet,
         transactionHash: transaction.transactionHash,
       });
 
@@ -489,7 +480,7 @@ export class ComplianceService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: hederaTestnet,
+        chain: cronosTestnet,
         transactionHash: transaction.transactionHash,
       });
 

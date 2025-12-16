@@ -3,7 +3,8 @@
 import Client from "./Client.js";
 import WebChannel from "../channel/WebChannel.js";
 import LedgerId from "../LedgerId.js";
-import { WebNetwork, MirrorNetwork } from "../constants/ClientConstants.js";
+import { WebNetwork, WebMirrorNetwork } from "../constants/ClientConstants.js";
+
 import AddressBookQuery from "../network/AddressBookQueryWeb.js";
 import FileId from "../file/FileId.js";
 
@@ -26,33 +27,10 @@ export default class WebClient extends Client {
      */
     constructor(props) {
         super(props);
+
         if (props != null) {
             if (typeof props.network === "string") {
-                switch (props.network) {
-                    case "mainnet":
-                        this.setNetwork(WebNetwork.MAINNET);
-                        this.setLedgerId(LedgerId.MAINNET);
-                        this.setMirrorNetwork(MirrorNetwork.MAINNET);
-                        break;
-
-                    case "testnet":
-                        this.setNetwork(WebNetwork.TESTNET);
-                        this.setLedgerId(LedgerId.TESTNET);
-                        this.setMirrorNetwork(MirrorNetwork.TESTNET);
-                        break;
-
-                    case "previewnet":
-                        this.setNetwork(WebNetwork.PREVIEWNET);
-                        this.setLedgerId(LedgerId.PREVIEWNET);
-                        this.setMirrorNetwork(MirrorNetwork.PREVIEWNET);
-                        break;
-
-                    default:
-                        throw new Error(
-                            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                            `unknown network: ${props.network}`,
-                        );
-                }
+                this._setNetworkFromName(props.network);
             } else if (props.network != null) {
                 Client._validateNetworkConsistency(props.network);
 
@@ -66,6 +44,28 @@ export default class WebClient extends Client {
                 this._realm = realm;
 
                 this.setNetwork(props.network);
+            }
+
+            if (typeof props.mirrorNetwork === "string") {
+                switch (props.mirrorNetwork) {
+                    case "mainnet":
+                        this.setMirrorNetwork(WebMirrorNetwork.MAINNET);
+                        break;
+
+                    case "testnet":
+                        this.setMirrorNetwork(WebMirrorNetwork.TESTNET);
+                        break;
+
+                    case "previewnet":
+                        this.setMirrorNetwork(WebMirrorNetwork.PREVIEWNET);
+                        break;
+
+                    default:
+                        this.setMirrorNetwork([props.mirrorNetwork]);
+                        break;
+                }
+            } else if (props.mirrorNetwork != null) {
+                this.setMirrorNetwork(props.mirrorNetwork);
             }
         }
     }
@@ -139,6 +139,20 @@ export default class WebClient extends Client {
     static forPreviewnet() {
         return new WebClient({
             network: "previewnet",
+        });
+    }
+
+    /**
+     * Construct a Hedera client pre-configured for local-node access.
+     *
+     * @param {object} [props]
+     * @param {boolean} [props.scheduleNetworkUpdate]
+     * @returns {WebClient}
+     */
+    static forLocalNode(props = { scheduleNetworkUpdate: false }) {
+        return new WebClient({
+            network: "local-node",
+            ...props,
         });
     }
 
@@ -222,8 +236,25 @@ export default class WebClient extends Client {
                     break;
                 case "mainnet":
                     this._network.setNetwork(WebNetwork.MAINNET);
+                    break;
+                case "local-node":
+                    this._network.setNetwork(WebNetwork.LOCAL_NODE);
+                    break;
             }
         } else {
+            // Check for deprecation warnings for network endpoints with schemes
+            for (const [key] of Object.entries(network)) {
+                if (key.startsWith("https://") || key.startsWith("http://")) {
+                    console.warn(
+                        '[Deprecation Notice] Hiero SDK: Network endpoint "' +
+                            key +
+                            '" includes a URL scheme (e.g. "https://"). ' +
+                            "This format was accepted in earlier versions but is now deprecated. " +
+                            'Please remove the scheme and use "host:port" instead (e.g. "node00.swirldslabs.com:443"). ' +
+                            "Support for scheme-prefixed endpoints will be removed in a future major release.",
+                    );
+                }
+            }
             this._network.setNetwork(network);
         }
     }
@@ -236,16 +267,16 @@ export default class WebClient extends Client {
         if (typeof mirrorNetwork === "string") {
             switch (mirrorNetwork) {
                 case "local-node":
-                    this._mirrorNetwork.setNetwork(MirrorNetwork.LOCAL_NODE);
+                    this._mirrorNetwork.setNetwork(WebMirrorNetwork.LOCAL_NODE);
                     break;
                 case "previewnet":
-                    this._mirrorNetwork.setNetwork(MirrorNetwork.PREVIEWNET);
+                    this._mirrorNetwork.setNetwork(WebMirrorNetwork.PREVIEWNET);
                     break;
                 case "testnet":
-                    this._mirrorNetwork.setNetwork(MirrorNetwork.TESTNET);
+                    this._mirrorNetwork.setNetwork(WebMirrorNetwork.TESTNET);
                     break;
                 case "mainnet":
-                    this._mirrorNetwork.setNetwork(MirrorNetwork.MAINNET);
+                    this._mirrorNetwork.setNetwork(WebMirrorNetwork.MAINNET);
                     break;
                 default:
                     this._mirrorNetwork.setNetwork([mirrorNetwork]);
@@ -254,6 +285,46 @@ export default class WebClient extends Client {
             this._mirrorNetwork.setNetwork(mirrorNetwork);
         }
 
+        return this;
+    }
+
+    /**
+     * @private
+     * @param {string} name
+     * @returns {this}
+     */
+    _setNetworkFromName(name) {
+        switch (name) {
+            case "mainnet":
+                this.setNetwork(WebNetwork.MAINNET);
+                this.setMirrorNetwork(WebMirrorNetwork.MAINNET);
+                this.setLedgerId(LedgerId.MAINNET);
+                break;
+
+            case "testnet":
+                this.setNetwork(WebNetwork.TESTNET);
+                this.setMirrorNetwork(WebMirrorNetwork.TESTNET);
+                this.setLedgerId(LedgerId.TESTNET);
+                break;
+
+            case "previewnet":
+                this.setNetwork(WebNetwork.PREVIEWNET);
+                this.setMirrorNetwork(WebMirrorNetwork.PREVIEWNET);
+                this.setLedgerId(LedgerId.PREVIEWNET);
+                break;
+
+            case "local-node":
+                this.setNetwork(WebNetwork.LOCAL_NODE);
+                this.setMirrorNetwork(WebMirrorNetwork.LOCAL_NODE);
+                this.setLedgerId(LedgerId.LOCAL_NODE);
+                break;
+
+            default:
+                throw new Error(
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                    `unknown network: ${name}`,
+                );
+        }
         return this;
     }
 
@@ -306,7 +377,7 @@ export default class WebClient extends Client {
      * @returns {(address: string) => WebChannel}
      */
     _createNetworkChannel() {
-        return (address) => new WebChannel(address);
+        return (address) => new WebChannel(address, this.grpcDeadline);
     }
 
     /**

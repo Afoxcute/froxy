@@ -1,6 +1,5 @@
 import { ThirdwebClient, getContract, prepareContractCall, readContract, sendTransaction, waitForReceipt } from "thirdweb";
-import { defineChain } from "thirdweb";
-import { hederaTestnet } from "viem/chains";
+import { CRONOS_TESTNET } from "./x402PaymentService";
 import IPAssetHTSKYCABI from "../abi/IPAssetHTSKYC.json";
 import IPAssetManagerV2ABI from "../abi/IPAssetManagerV2.json";
 import IPAssetComplianceManagerABI from "../abi/IPAssetComplianceManager.json";
@@ -33,7 +32,7 @@ export class KYCService {
     // Initialize HTS KYC contract
     this.htsKycContract = getContract({
       address: CONTRACT_ADDRESSES.IP_ASSET_HTS_KYC,
-      chain: defineChain(hederaTestnet.id),
+      chain: CRONOS_TESTNET,
       client: this.client,
       abi: IP_ASSET_HTS_KYC_ABI,
     });
@@ -41,7 +40,7 @@ export class KYCService {
     // Initialize IP Asset Manager contract
     this.ipAssetManagerContract = getContract({
       address: CONTRACT_ADDRESSES.IP_ASSET_MANAGER_V2,
-      chain: defineChain(hederaTestnet.id),
+      chain: CRONOS_TESTNET,
       client: this.client,
       abi: IP_ASSET_MANAGER_V2_ABI,
     });
@@ -49,7 +48,7 @@ export class KYCService {
     // Initialize Compliance Manager contract
     this.complianceManagerContract = getContract({
       address: CONTRACT_ADDRESSES.IP_ASSET_COMPLIANCE_MANAGER,
-      chain: defineChain(hederaTestnet.id),
+      chain: CRONOS_TESTNET,
       client: this.client,
       abi: IP_ASSET_COMPLIANCE_MANAGER_ABI,
     });
@@ -71,7 +70,7 @@ export class KYCService {
       // Create a contract instance for the HTS token
       const tokenContract = getContract({
         address: tokenAddress as `0x${string}`,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         client: this.client,
         abi: [
           {
@@ -97,7 +96,7 @@ export class KYCService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 
@@ -374,7 +373,7 @@ export class KYCService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 
@@ -434,7 +433,7 @@ export class KYCService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 
@@ -485,7 +484,7 @@ export class KYCService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 
@@ -526,7 +525,7 @@ export class KYCService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 

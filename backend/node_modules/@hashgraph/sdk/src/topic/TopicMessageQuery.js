@@ -3,7 +3,7 @@
 import TransactionId from "../transaction/TransactionId.js";
 import SubscriptionHandle from "./SubscriptionHandle.js";
 import TopicMessage from "./TopicMessage.js";
-import * as HieroProto from "@hashgraph/proto";
+import * as HieroProto from "@hiero-ledger/proto";
 import TopicId from "./TopicId.js";
 import Long from "long";
 import Timestamp from "../Timestamp.js";
@@ -224,8 +224,8 @@ export default class TopicMessageQuery {
             startTime instanceof Timestamp
                 ? startTime
                 : startTime instanceof Date
-                  ? Timestamp.fromDate(startTime)
-                  : new Timestamp(startTime, 0);
+                ? Timestamp.fromDate(startTime)
+                : new Timestamp(startTime, 0);
         return this;
     }
 
@@ -247,8 +247,8 @@ export default class TopicMessageQuery {
             endTime instanceof Timestamp
                 ? endTime
                 : endTime instanceof Date
-                  ? Timestamp.fromDate(endTime)
-                  : new Timestamp(endTime, 0);
+                ? Timestamp.fromDate(endTime)
+                : new Timestamp(endTime, 0);
         return this;
     }
 
@@ -513,7 +513,9 @@ export default class TopicMessageQuery {
         const delay = Math.min(250 * 2 ** this._attempt, this._maxBackoff);
 
         console.warn(
-            `Error subscribing to topic ${this._topicId?.toString() ?? "UNKNOWN"} ` +
+            `Error subscribing to topic ${
+                this._topicId?.toString() ?? "UNKNOWN"
+            } ` +
                 `during attempt ${this._attempt}. Waiting ${delay} ms before next attempt: ${errorMessage}`,
         );
 

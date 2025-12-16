@@ -6,27 +6,27 @@ import IPAssetManagerV2ABI from "../abi/IPAssetManagerV2.json";
 // Use the correct IPAssetManagerV2 ABI
 const IP_ASSET_MANAGER_V2_ABI = IPAssetManagerV2ABI.abi as any;
 
-// Hedera Testnet configuration with multiple RPC endpoints for fallback
-export const hederaTestnet = {
-  id: 296,
-  name: 'Hedera Testnet',
+// Cronos Testnet configuration
+export const cronosTestnet = {
+  id: 338,
+  name: 'Cronos Testnet',
   nativeCurrency: {
-    name: 'HBAR',
-    symbol: 'HBAR',
+    name: 'CRO',
+    symbol: 'CRO',
     decimals: 18,
   },
-  rpc: 'https://testnet.hashio.io/api',
+  rpc: 'https://evm-t3.cronos.org',
   rpcUrls: {
     default: {
-      http: ['https://testnet.hashio.io/api', 'https://hedera-testnet-rpc.allthatnode.com:8545'],
+      http: ['https://evm-t3.cronos.org'],
     },
     public: {
-      http: ['https://testnet.hashio.io/api', 'https://hedera-testnet-rpc.allthatnode.com:8545'],
+      http: ['https://evm-t3.cronos.org'],
     },
   },
   blockExplorers: [{
-    name: 'Hedera Testnet Explorer',
-    url: 'https://testnet.hashscan.io',
+    name: 'Cronos Testnet Explorer',
+    url: 'https://explorer.cronos.org/testnet',
   }],
 };
 
@@ -47,7 +47,7 @@ export class ContractService {
     this.client = client;
     this.contract = getContract({
       address: CONTRACT_ADDRESSES.IP_ASSET_MANAGER_V2,
-      chain: hederaTestnet,
+      chain: cronosTestnet,
       client: this.client,
       abi: IP_ASSET_MANAGER_V2_ABI,
     });
@@ -75,7 +75,7 @@ export class ContractService {
 
     const receipt = await waitForReceipt({
       client: this.client,
-      chain: hederaTestnet,
+      chain: cronosTestnet,
       transactionHash: transaction.transactionHash,
     });
 
@@ -112,7 +112,7 @@ export class ContractService {
 
     const receipt = await waitForReceipt({
       client: this.client,
-      chain: hederaTestnet,
+      chain: cronosTestnet,
       transactionHash: transaction.transactionHash,
     });
 
@@ -141,7 +141,7 @@ export class ContractService {
 
     const receipt = await waitForReceipt({
       client: this.client,
-      chain: hederaTestnet,
+      chain: cronosTestnet,
       transactionHash: transaction.transactionHash,
     });
 
@@ -169,7 +169,7 @@ export class ContractService {
 
     const receipt = await waitForReceipt({
       client: this.client,
-      chain: hederaTestnet,
+      chain: cronosTestnet,
       transactionHash: transaction.transactionHash,
     });
 

@@ -2,19 +2,10 @@
 export const checkIPFSHashRegistered = async (ipfsHash: string, contractAddress: string) => {
   try {
     const { readContract } = await import('thirdweb');
-    const { defineChain } = await import('thirdweb/chains');
     const { createThirdwebClient } = await import('thirdweb');
     
-    const hederaTestnet = defineChain({
-      id: 296,
-      name: "Hedera Testnet",
-      rpc: "https://testnet.hashio.io/api",
-      nativeCurrency: {
-        name: "HBAR",
-        symbol: "HBAR",
-        decimals: 8,
-      },
-    });
+    const { CRONOS_TESTNET } = await import('../services/x402PaymentService');
+    const cronosTestnet = CRONOS_TESTNET;
 
     const client = createThirdwebClient({
       clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID || "your-client-id",
@@ -24,7 +15,7 @@ export const checkIPFSHashRegistered = async (ipfsHash: string, contractAddress:
     
     const contract = getContract({
       address: contractAddress as `0x${string}`,
-      chain: hederaTestnet,
+      chain: cronosTestnet,
       client: client,
       abi: [
         {

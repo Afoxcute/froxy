@@ -4,26 +4,26 @@ const { createPublicClient, createWalletClient, http, parseEther, formatEther } 
 const { privateKeyToAccount } = require("viem/accounts");
 const { defineChain } = require("viem");
 
-// Define Hedera Testnet chain with correct Chain ID
-const hederaTestnet = defineChain({
-  id: 296, // 0x128 in hex - Hedera Testnet Chain ID
-  name: 'Hedera Testnet',
-  network: 'hedera-testnet',
+// Define Cronos Testnet chain with correct Chain ID
+const cronosTestnet = defineChain({
+  id: 338, // Cronos Testnet Chain ID
+  name: 'Cronos Testnet',
+  network: 'cronos-testnet',
   nativeCurrency: {
-    decimals: 8,
-    name: 'HBAR',
-    symbol: 'HBAR',
+    decimals: 18,
+    name: 'CRO',
+    symbol: 'CRO',
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet.hashio.io/api'],
+      http: ['https://evm-t3.cronos.org'],
     },
     public: {
-      http: ['https://testnet.hashio.io/api'],
+      http: ['https://evm-t3.cronos.org'],
     },
   },
   blockExplorers: {
-    default: { name: 'HashScan', url: 'https://hashscan.io/testnet' },
+    default: { name: 'Cronos Explorer', url: 'https://explorer.cronos.org/testnet' },
   },
 });
 
@@ -32,7 +32,7 @@ const IP_ASSET_LOCKER_ABI = [
   {
     "inputs": [
       {"internalType": "uint256", "name": "ipAssetId", "type": "uint256"},
-      {"internalType": "uint256", "name": "hbarAmount", "type": "uint256"}
+      {"internalType": "uint256", "name": "croAmount", "type": "uint256"}
     ],
     "name": "lockIPAsset",
     "outputs": [{"internalType": "bool", "name": "success", "type": "bool"}],
@@ -42,7 +42,7 @@ const IP_ASSET_LOCKER_ABI = [
   {
     "inputs": [
       {"internalType": "uint256", "name": "ipAssetId", "type": "uint256"},
-      {"internalType": "uint256", "name": "hbarAmount", "type": "uint256"}
+      {"internalType": "uint256", "name": "croAmount", "type": "uint256"}
     ],
     "name": "unlockIPAsset",
     "outputs": [{"internalType": "bool", "name": "success", "type": "bool"}],
@@ -134,15 +134,15 @@ export class IPAssetLockerService {
   constructor() {
     // Initialize Viem clients with correct Hedera Testnet Chain ID (296)
     this.publicClient = createPublicClient({
-      chain: hederaTestnet,
-      transport: http(process.env.HEDERA_RPC_URL || "https://testnet.hashio.io/api")
+      chain: cronosTestnet,
+      transport: http(process.env.RPC_PROVIDER_URL || "https://evm-t3.cronos.org")
     });
 
     const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
     this.walletClient = createWalletClient({
       account,
-      chain: hederaTestnet,
-      transport: http(process.env.HEDERA_RPC_URL || "https://testnet.hashio.io/api")
+      chain: cronosTestnet,
+      transport: http(process.env.RPC_PROVIDER_URL || "https://evm-t3.cronos.org")
     });
 
     // Initialize contracts with Hedera Testnet addresses
@@ -173,7 +173,7 @@ export class IPAssetLockerService {
         functionName: "lockIPAsset",
         args: [BigInt(ipAssetId), amount],
         account: this.walletClient.account,
-        chain: hederaTestnet // Explicitly specify the chain
+        chain: cronosTestnet // Explicitly specify the chain
       });
 
       return { success: true, transactionHash: hash };
@@ -196,7 +196,7 @@ export class IPAssetLockerService {
         functionName: "unlockIPAsset",
         args: [BigInt(ipAssetId), amount],
         account: this.walletClient.account,
-        chain: hederaTestnet // Explicitly specify the chain
+        chain: cronosTestnet // Explicitly specify the chain
       });
 
       return { success: true, transactionHash: hash };

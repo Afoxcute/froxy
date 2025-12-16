@@ -412,7 +412,7 @@ export const KYCManagement: React.FC<KYCManagementProps> = ({
         </div>
         <div className="card-body">
           <p className="card-description">
-            Associate your account with the HTS token before granting KYC. This is required for Hedera Token Service.
+            Associate your account with the token before granting KYC. This is required for token-based access control.
           </p>
           <div className="form-group-row">
             <button 

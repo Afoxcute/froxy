@@ -8,7 +8,7 @@ import Transfer from "../Transfer.js";
 import ContractFunctionResult from "../contract/ContractFunctionResult.js";
 import TokenTransferMap from "../account/TokenTransferMap.js";
 import TokenNftTransferMap from "../account/TokenNftTransferMap.js";
-import * as HieroProto from "@hashgraph/proto";
+import * as HieroProto from "@hiero-ledger/proto";
 import ScheduleId from "../schedule/ScheduleId.js";
 import AssessedCustomFee from "../token/AssessedCustomFee.js";
 import TokenAssocation from "../token/TokenAssociation.js";
@@ -472,11 +472,11 @@ export default class TransactionRecord {
                       false,
                   )
                 : record.contractCreateResult != null
-                  ? ContractFunctionResult._fromProtobuf(
-                        record.contractCreateResult,
-                        true,
-                    )
-                  : undefined;
+                ? ContractFunctionResult._fromProtobuf(
+                      record.contractCreateResult,
+                      true,
+                  )
+                : undefined;
 
         const newPendingAirdrops =
             record.newPendingAirdrops != null

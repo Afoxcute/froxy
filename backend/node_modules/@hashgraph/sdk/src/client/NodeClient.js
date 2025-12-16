@@ -6,25 +6,22 @@ import Client from "./Client.js";
 import NodeChannel from "../channel/NodeChannel.js";
 import NodeMirrorChannel from "../channel/NodeMirrorChannel.js";
 import LedgerId from "../LedgerId.js";
-import AccountId from "../account/AccountId.js";
 import NodeAddressBook from "../address_book/NodeAddressBook.js";
 import * as mainnet from "./addressbooks/mainnet.js";
 import * as testnet from "./addressbooks/testnet.js";
 import * as previewnet from "./addressbooks/previewnet.js";
 import * as hex from "../encoding/hex.js";
-import { MirrorNetwork } from "../constants/ClientConstants.js";
+import {
+    LocalNodeNetwork,
+    MirrorNetwork,
+} from "../constants/ClientConstants.js";
 
 const readFileAsync = util.promisify(fs.readFile);
 
 /**
  * @typedef {import("./Client.js").ClientConfiguration} ClientConfiguration
+ * @typedef {import("../account/AccountId.js").default} AccountId
  */
-
-export const Network = {
-    LOCAL_NODE: {
-        "127.0.0.1:50211": new AccountId(3),
-    },
-};
 
 /**
  * @augments {Client<NodeChannel, NodeMirrorChannel>}
@@ -37,9 +34,6 @@ export default class NodeClient extends Client {
      */
     constructor(props) {
         super(props);
-
-        /** @private */
-        this._maxExecutionTime = 10000;
 
         if (props != null) {
             if (typeof props.network === "string") {
@@ -270,12 +264,16 @@ export default class NodeClient extends Client {
 
     /**
      * Available only for NodeClient
-     *
+     * Legacy method maintained for backward compatibility.
+     * This method now calls setGrpcDeadline internally to ensure proper validation.
+     * @deprecated Use setGrpcDeadline instead.
      * @param {number} maxExecutionTime
      * @returns {this}
      */
     setMaxExecutionTime(maxExecutionTime) {
-        this._maxExecutionTime = maxExecutionTime;
+        // Use the parent class setGrpcDeadline method to ensure proper validation
+        // This ensures that maxExecutionTime follows the same validation rules as grpcDeadline
+        this.setGrpcDeadline(maxExecutionTime);
         return this;
     }
 
@@ -313,7 +311,7 @@ export default class NodeClient extends Client {
                 break;
 
             case "local-node":
-                this.setNetwork(Network.LOCAL_NODE);
+                this.setNetwork(LocalNodeNetwork);
                 this.setMirrorNetwork(MirrorNetwork.LOCAL_NODE);
                 this.setLedgerId(LedgerId.LOCAL_NODE);
                 break;
@@ -361,7 +359,7 @@ export default class NodeClient extends Client {
      * @returns {(address: string, cert?: string) => NodeChannel}
      */
     _createNetworkChannel() {
-        return (address) => new NodeChannel(address, this._maxExecutionTime);
+        return (address) => new NodeChannel(address, this.grpcDeadline);
     }
 
     /**

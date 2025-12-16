@@ -5,7 +5,7 @@ import { Address } from 'viem';
 import { CONTRACT_ADDRESSES } from '../config/contracts';
 import IPAssetManagerV2ABI from '../abi/IPAssetManagerV2.json';
 
-// IP Metadata interface for Hedera
+// IP Metadata interface for Cronos
 export interface IpMetadata {
     name: string;
     description: string;
@@ -20,7 +20,7 @@ export interface IpMetadata {
     created_at?: string;
 }
 
-export const registerIpWithHedera = async (
+export const registerIpWithCronos = async (
     ipHash: string,
     metadata: string,
     name: string = "IP Asset",
@@ -76,12 +76,12 @@ export const registerIpWithHedera = async (
             explorerUrl: `${BLOCK_EXPLORER_URL}/tx/${hash}`,
         };
     } catch (error) {
-        console.error('Error registering IP with Hedera:', error);
+        console.error('Error registering IP with Cronos:', error);
         throw error;
     }
 };
 
-export const mintLicenseOnHedera = async (
+export const mintLicenseOnCronos = async (
     ipTokenId: number,
     commercialUse: boolean,
     derivativeWorks: boolean,
@@ -145,7 +145,7 @@ export const mintLicenseOnHedera = async (
             explorerUrl: `${BLOCK_EXPLORER_URL}/tx/${hash}`,
         };
     } catch (error) {
-        console.error('Error minting license on Hedera:', error);
+        console.error('Error minting license on Cronos:', error);
         throw error;
     }
 };

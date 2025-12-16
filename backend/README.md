@@ -1,10 +1,10 @@
-# Hedera IP Management Backend
+# Cronos Testnet IP Management Backend
 
-This backend service provides IP (Intellectual Property) management functionality on the Hedera testnet using the SeekerIP smart contract.
+This backend service provides IP (Intellectual Property) management functionality on the Cronos testnet using the SeekerIP smart contract.
 
 ## Features
 
-- **IP Registration**: Register IP assets on Hedera testnet using SeekerIP contract
+- **IP Registration**: Register IP assets on Cronos testnet using SeekerIP contract
 - **License Minting**: Mint licenses for IP assets with customizable terms
 - **IPFS Integration**: Upload metadata to IPFS for decentralized storage
 - **Yakoa Integration**: Submit registered IPs to Yakoa for monitoring
@@ -15,7 +15,7 @@ Create a `.env` file in the backend directory:
 
 ```env
 WALLET_PRIVATE_KEY=your_private_key_here
-RPC_PROVIDER_URL=https://testnet.hashio.io/api
+RPC_PROVIDER_URL=https://evm-t3.cronos.org
 NFT_CONTRACT_ADDRESS=optional_nft_contract_address
 ```
 
@@ -61,11 +61,11 @@ NFT_CONTRACT_ADDRESS=optional_nft_contract_address
 
 ## Network Configuration
 
-- **Network**: Hedera Testnet
-- **Chain ID**: 296
-- **RPC URL**: https://testnet.hashio.io/api
-- **Explorer**: https://testnet.hashscan.io
-- **Native Token**: HBAR (used as WIP_TOKEN_ADDRESS)
+- **Network**: Cronos Testnet
+- **Chain ID**: 338
+- **RPC URL**: https://evm-t3.cronos.org
+- **Explorer**: https://explorer.cronos.org/testnet
+- **Native Token**: CRO
 
 ## Smart Contracts
 
@@ -88,9 +88,9 @@ yarn start
 
 The server will start on port 5000 by default.
 
-## Key Changes from Story Protocol
+## Key Changes
 
-1. **Network**: Migrated from Story Protocol networks to Hedera testnet
-2. **Token**: Using native HBAR token instead of WIP tokens
-3. **Contracts**: Using SeekerIP contract instead of Story Protocol contracts
-4. **API**: Updated endpoints to work with Hedera-specific functionality 
+1. **Network**: Migrated to Cronos testnet
+2. **Token**: Using native CRO token
+3. **Contracts**: Using SeekerIP contract for IP management
+4. **API**: Updated endpoints to work with Cronos testnet 

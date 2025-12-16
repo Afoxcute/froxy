@@ -44,7 +44,7 @@ const handleLicenseMinting = async (req: Request, res: Response) => {
         } else {
             return res.status(500).json({
                 error: result.message,
-                details: 'License minting failed on Hedera'
+                details: 'License minting failed on Cronos'
             });
         }
     } catch (err) {

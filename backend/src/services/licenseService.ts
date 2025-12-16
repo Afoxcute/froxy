@@ -1,4 +1,4 @@
-import { mintLicenseOnHedera } from './storyService';
+import { mintLicenseOnCronos } from './storyService';
 import { Address } from 'viem';
 
 export interface LicenseRequest {
@@ -14,7 +14,7 @@ export interface LicenseRequest {
 
 export const mintLicense = async (licenseRequest: LicenseRequest) => {
   try {
-    const { txHash, blockNumber, explorerUrl } = await mintLicenseOnHedera(
+      const { txHash, blockNumber, explorerUrl } = await mintLicenseOnCronos(
       licenseRequest.ipTokenId,
       licenseRequest.commercialUse,
       licenseRequest.derivativeWorks,
@@ -30,12 +30,12 @@ export const mintLicense = async (licenseRequest: LicenseRequest) => {
       txHash,
       blockNumber,
       explorerUrl,
-      message: 'License minted successfully on Hedera'
+      message: 'License minted successfully on Cronos'
     };
   } catch (error) {
     return {
       success: false,
-      message: 'Failed to mint license on Hedera'
+      message: 'Failed to mint license on Cronos'
     };
   }
 }; 

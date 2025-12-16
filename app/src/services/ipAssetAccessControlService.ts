@@ -1,6 +1,5 @@
 import { ThirdwebClient, getContract, readContract } from "thirdweb";
-import { defineChain } from "thirdweb";
-import { hederaTestnet } from "viem/chains";
+import { CRONOS_TESTNET } from "./x402PaymentService";
 // Remove unused import
 // import IPAssetManagerV2ABI from "../abi/IPAssetManagerV2.json";
 import IPAssetComplianceManagerABI from "../abi/IPAssetComplianceManager.json";
@@ -40,7 +39,7 @@ export class IPAssetAccessControlService {
     // Initialize Compliance Manager contract
     this.complianceManagerContract = getContract({
       address: CONTRACT_ADDRESSES.IP_ASSET_COMPLIANCE_MANAGER,
-      chain: defineChain(hederaTestnet.id),
+      chain: CRONOS_TESTNET,
       client: this.client,
       abi: IP_ASSET_COMPLIANCE_MANAGER_ABI,
     });

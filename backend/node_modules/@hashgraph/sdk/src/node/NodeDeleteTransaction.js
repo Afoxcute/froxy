@@ -3,19 +3,20 @@
 import Transaction, {
     TRANSACTION_REGISTRY,
 } from "../transaction/Transaction.js";
+import Long from "long";
 
 /**
  * @namespace proto
- * @typedef {import("@hashgraph/proto").proto.ITransaction} ITransaction
- * @typedef {import("@hashgraph/proto").proto.ITransaction} ISignedTransaction
- * @typedef {import("@hashgraph/proto").proto.TransactionBody} TransactionBody
- * @typedef {import("@hashgraph/proto").proto.ITransactionBody} ITransactionBody
- * @typedef {import("@hashgraph/proto").proto.ITransactionResponse} ITransactionResponse
+ * @typedef {import("@hiero-ledger/proto").proto.ITransaction} ITransaction
+ * @typedef {import("@hiero-ledger/proto").proto.ITransaction} ISignedTransaction
+ * @typedef {import("@hiero-ledger/proto").proto.TransactionBody} TransactionBody
+ * @typedef {import("@hiero-ledger/proto").proto.ITransactionBody} ITransactionBody
+ * @typedef {import("@hiero-ledger/proto").proto.ITransactionResponse} ITransactionResponse
  */
 
 /**
  * @namespace com.hedera.hapi.node.addressbook
- * @typedef {import("@hashgraph/proto").com.hedera.hapi.node.addressbook.INodeDeleteTransactionBody} INodeDeleteTransactionBody
+ * @typedef {import("@hiero-ledger/proto").com.hedera.hapi.node.addressbook.INodeDeleteTransactionBody} INodeDeleteTransactionBody
  */
 
 /**
@@ -84,7 +85,25 @@ export default class NodeDeleteTransaction extends Transaction {
      * @returns {NodeDeleteTransaction}
      */
     setNodeId(nodeId) {
-        this._nodeId = nodeId;
+        this._requireNotFrozen();
+
+        if (nodeId == null) {
+            this._nodeId = null;
+            return this;
+        }
+
+        // Convert to Long if it's a plain number
+        const longNodeId = Long.isLong(nodeId)
+            ? nodeId
+            : Long.fromValue(nodeId);
+
+        if (longNodeId.toNumber() < 0) {
+            throw new Error(
+                "NodeDeleteTransaction: 'nodeId' must be positive.",
+            );
+        }
+
+        this._nodeId = longNodeId;
 
         return this;
     }

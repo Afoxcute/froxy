@@ -2,27 +2,27 @@ import 'dotenv/config'
 import { Chain, Address, createPublicClient, createWalletClient, http, WalletClient } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
-// Hedera testnet configuration
-const hederaTestnet: Chain = {
-  id: 296,
-  name: 'Hedera Testnet',
+// Cronos testnet configuration
+const cronosTestnet: Chain = {
+  id: 338,
+  name: 'Cronos Testnet',
   nativeCurrency: {
-    name: 'HBAR',
-    symbol: 'HBAR',
+    name: 'CRO',
+    symbol: 'CRO',
     decimals: 18,
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet.hashio.io/api'],
+      http: ['https://evm-t3.cronos.org'],
     },
     public: {
-      http: ['https://testnet.hashio.io/api'],
+      http: ['https://evm-t3.cronos.org'],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Hedera Testnet Explorer',
-      url: 'https://testnet.hashscan.io',
+      name: 'Cronos Testnet Explorer',
+      url: 'https://explorer.cronos.org/testnet',
     },
   },
 }
@@ -36,10 +36,10 @@ interface NetworkConfig {
 
 // Network configuration
 const networkConfig: NetworkConfig = {
-    rpcProviderUrl: 'https://testnet.hashio.io/api',
-    blockExplorer: 'https://testnet.hashscan.io',
-    chain: hederaTestnet,
-    nativeTokenAddress: '0x0000000000000000000000000000000000000000' as Address, // Native HBAR token
+    rpcProviderUrl: 'https://evm-t3.cronos.org',
+    blockExplorer: 'https://explorer.cronos.org/testnet',
+    chain: cronosTestnet,
+    nativeTokenAddress: '0x0000000000000000000000000000000000000000' as Address, // Native CRO token
 }
 
 // Helper functions

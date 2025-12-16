@@ -1,6 +1,5 @@
 import { ThirdwebClient, getContract, prepareContractCall, readContract, sendTransaction, waitForReceipt } from "thirdweb";
-import { defineChain } from "thirdweb";
-import { hederaTestnet } from "viem/chains";
+import { CRONOS_TESTNET } from "./x402PaymentService";
 import EnhancedLicensingManagerABI from "../abi/EnhancedLicensingManager.json";
 // Remove unused import
 // import IPAssetComplianceManagerABI from "../abi/IPAssetComplianceManager.json";
@@ -99,7 +98,7 @@ export class EnhancedLicensingService {
     // Initialize Enhanced Licensing Manager contract
     this.enhancedLicensingContract = getContract({
       address: CONTRACT_ADDRESSES.ENHANCED_LICENSING_MANAGER,
-      chain: defineChain(hederaTestnet.id),
+      chain: CRONOS_TESTNET,
       client: this.client,
       abi: ENHANCED_LICENSING_MANAGER_ABI,
     });
@@ -148,7 +147,7 @@ export class EnhancedLicensingService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 
@@ -193,7 +192,7 @@ export class EnhancedLicensingService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 
@@ -234,7 +233,7 @@ export class EnhancedLicensingService {
 
       const receipt = await waitForReceipt({
         client: this.client,
-        chain: defineChain(hederaTestnet.id),
+        chain: CRONOS_TESTNET,
         transactionHash: transaction.transactionHash,
       });
 

@@ -218,6 +218,16 @@
     viem "^2.27.2"
     zustand "5.0.3"
 
+"@crypto.com/ai-agent-client@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@crypto.com/ai-agent-client/-/ai-agent-client-1.0.2.tgz#d2e6c0571555c3b3a12e8cd026917f948224cb63"
+  integrity sha512-yy/KmukubBtLDP4KUtRyXh3laIpzbTMJrifTmRxtxqRhMmuCb5XzTj401mn76AtPU8wOe5SSRpwWFbL4IrYQOw==
+
+"@crypto.com/developer-platform-client@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@crypto.com/developer-platform-client/-/developer-platform-client-1.1.2.tgz#a27f9cab3e9fbe58297a061ec4d5071be6f75cbb"
+  integrity sha512-BG0yu93FxsUM2Za/EWHyr5WXFxKwJ/chj/aNP7RtR3gk+w7kuvHlI6O/F9edGZDI+C8NPbuCaUNWKllopmPCNg==
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -2994,7 +3004,7 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@^1.8.1:
+axios@^1.8.1, axios@^1.9.0:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
   integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==

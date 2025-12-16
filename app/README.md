@@ -1,10 +1,10 @@
 # SeekerIP Frontend
 
-A modern React application for IP (Intellectual Property) management on the Hedera blockchain.
+A modern React application for IP (Intellectual Property) management on the Cronos blockchain.
 
 ## Features
 
-- **IP Asset Registration**: Upload and register IP assets on Hedera
+- **IP Asset Registration**: Upload and register IP assets on Cronos
 - **License Management**: Create and manage licenses for IP assets
 - **Revenue Distribution**: Pay revenue and distribute royalties
 - **Modern UI**: Beautiful, responsive design with glassmorphism effects
@@ -17,7 +17,7 @@ A modern React application for IP (Intellectual Property) management on the Hede
 
 - Node.js 18+ 
 - Yarn or npm
-- Hedera testnet account
+- Cronos testnet account
 
 ### Installation
 
@@ -44,11 +44,11 @@ yarn build
 
 ### Registering IP Assets
 
-1. Connect your wallet (Hedera testnet)
+1. Connect your wallet (Cronos testnet)
 2. Upload your IP file (images, documents, audio, video)
 3. Set the IP name and description
 4. Configure license parameters
-5. Click "Register IP" to mint the asset on Hedera
+5. Click "Register IP" to mint the asset on Cronos
 
 ### Minting Licenses
 
@@ -60,7 +60,7 @@ yarn build
 ### Paying Revenue
 
 1. Select the target IP Asset
-2. Enter the payment amount in HBAR
+2. Enter the payment amount in CRO
 3. Click "Pay Revenue" and confirm the transaction
 4. Royalties will be automatically distributed to license holders
 
@@ -72,7 +72,7 @@ yarn build
 
 ## Technical Details
 
-- **Blockchain**: Hedera Testnet (Chain ID: 296)
+- **Blockchain**: Cronos Testnet (Chain ID: 338)
 - **Smart Contract**: SeekerIP.sol
 - **Wallet Integration**: Thirdweb SDK
 - **IPFS**: Used for storing IP content, metadata, and license terms

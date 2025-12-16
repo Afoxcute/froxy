@@ -13,23 +13,12 @@ if (fs.existsSync(envPath)) {
 }
 
 // Create .env file with default values
-const envContent = `# Hedera Configuration
-# Replace with your actual Hedera account ID (e.g., 0.0.123456)
-HEDERA_OPERATOR_ID=0.0.123456
-
-# Replace with your actual Hedera private key in DER format
-# Example: 302e020100300506032b6570042204201234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
-HEDERA_OPERATOR_KEY=302e020100300506032b6570042204201234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
-
-# Hedera RPC URL
-HEDERA_RPC_URL=https://testnet.hashio.io/api
-
-# Wallet Configuration
+const envContent = `# Wallet Configuration
 # Replace with your actual wallet private key (without 0x prefix)
 WALLET_PRIVATE_KEY=1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
 
-# RPC Configuration
-RPC_PROVIDER_URL=https://testnet.hashio.io/api
+# RPC Configuration (Cronos Testnet)
+RPC_PROVIDER_URL=https://evm-t3.cronos.org
 
 # Pinata IPFS Configuration
 # Get your JWT from https://app.pinata.cloud/developers/api-keys
@@ -39,7 +28,7 @@ PINATA_JWT=your_pinata_jwt_here
 # Get these from your Yakoa account
 YAKOA_API_KEY=your_yakoa_api_key_here
 YAKOA_SUBDOMAIN=your_subdomain
-YAKOA_NETWORK=hedera_testnet
+YAKOA_NETWORK=cronos_testnet
 
 # NFT Contract Configuration
 NFT_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000
@@ -53,7 +42,7 @@ try {
   console.log('✅ Created .env file with default values');
   console.log('\n📝 Next steps:');
   console.log('1. Edit the .env file with your actual credentials');
-  console.log('2. Get your Hedera credentials from https://portal.hedera.com/');
+  console.log('2. Get your wallet private key from your Cronos testnet wallet');
   console.log('3. Get your Pinata JWT from https://app.pinata.cloud/developers/api-keys');
   console.log('4. Configure Yakoa API keys if needed');
   console.log('\n⚠️  Important: Never commit the .env file to version control!');

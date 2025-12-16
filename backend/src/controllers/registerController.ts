@@ -1,4 +1,4 @@
-import { registerIpWithHedera } from '../services/storyService';
+import { registerIpWithCronos } from '../services/storyService';
 import { registerToYakoa } from '../services/yakoascanner';
 import { convertBigIntsToStrings } from '../utils/bigIntSerializer';
 import { Address } from 'viem';
@@ -54,14 +54,14 @@ export const registerIP = async (req: any, res: any) => {
       console.warn('Could not parse metadata for name/description, using defaults');
     }
 
-    // 1. Register on Hedera using IPAssetManagerV2 contract
+    // 1. Register on Cronos using IPAssetManagerV2 contract
     const {
       txHash,
       ipAssetId,
       blockNumber,
       explorerUrl
-    } = await registerIpWithHedera(ipHash, metadata, name, description, contractAddress as Address);
-    console.log("✅ Hedera registration successful:", {
+    } = await registerIpWithCronos(ipHash, metadata, name, description, contractAddress as Address);
+    console.log("✅ Cronos registration successful:", {
       txHash,
       ipAssetId,
       blockNumber,
@@ -108,7 +108,7 @@ export const registerIP = async (req: any, res: any) => {
         creatorId: creatorAddress.toLowerCase(),
         metadata: {
           ip_hash: extractedHash,
-          blockchain: 'hedera',
+          blockchain: 'cronos-testnet',
           contract_address: contractAddress.toLowerCase(),
           token_id: ipAssetId?.toString() || '0'
         },
@@ -129,8 +129,8 @@ export const registerIP = async (req: any, res: any) => {
 
     // 3. Prepare response
     const successMessage = yakoaResult 
-      ? 'IP Asset successfully registered on Hedera and Yakoa'
-      : 'IP Asset registered on Hedera, already exists in Yakoa';
+      ? 'IP Asset successfully registered on Cronos and Yakoa'
+      : 'IP Asset registered on Cronos, already exists in Yakoa';
 
     const response = {
       success: true,
@@ -141,7 +141,7 @@ export const registerIP = async (req: any, res: any) => {
           ipAssetId,
           blockNumber,
           explorerUrl,
-          network: 'Hedera Testnet'
+          network: 'Cronos Testnet'
         },
                  yakoa: yakoaResult ? {
            id: yakoaResult.id,

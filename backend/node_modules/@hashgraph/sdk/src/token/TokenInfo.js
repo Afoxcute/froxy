@@ -5,7 +5,7 @@ import AccountId from "../account/AccountId.js";
 import Duration from "../Duration.js";
 import Timestamp from "../Timestamp.js";
 import Long from "long";
-import * as HieroProto from "@hashgraph/proto";
+import * as HieroProto from "@hiero-ledger/proto";
 import TokenType from "./TokenType.js";
 import TokenSupplyType from "./TokenSupplyType.js";
 import CustomFixedFee from "./CustomFixedFee.js";
@@ -398,14 +398,14 @@ export default class TokenInfo {
                 this.defaultFreezeStatus == null
                     ? 0
                     : this.defaultFreezeStatus
-                      ? 1
-                      : 2,
+                    ? 1
+                    : 2,
             defaultKycStatus:
                 this.defaultKycStatus == null
                     ? 0
                     : this.defaultKycStatus
-                      ? 1
-                      : 2,
+                    ? 1
+                    : 2,
             pauseStatus:
                 this.pauseStatus == null ? 0 : this.pauseStatus ? 1 : 2,
             deleted: this.isDeleted,
