@@ -11,7 +11,7 @@ export const WIP_TOKEN_ADDRESS: Address = NATIVE_TOKEN_ADDRESS
 export const NFTContractAddress: Address =
     (process.env.NFT_CONTRACT_ADDRESS as Address) || zeroAddress
 
-// License terms for Hedera IP management
+// License terms interface (legacy - not used in subscription system)
 export interface LicenseTerms {
     transferable: boolean
     royaltyPolicy: Address
@@ -118,11 +118,3 @@ export function getCronosAddressExplorerUrl(address: string): string {
     return `${networkInfo.blockExplorer}/address/${address}`
 }
 
-// Legacy aliases for backward compatibility
-export function getHederaExplorerUrl(txHash: string): string {
-    return getCronosExplorerUrl(txHash);
-}
-
-export function getHederaAddressExplorerUrl(address: string): string {
-    return getCronosAddressExplorerUrl(address);
-}

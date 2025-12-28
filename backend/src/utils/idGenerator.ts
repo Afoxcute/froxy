@@ -34,18 +34,21 @@ export function generateTimestampedId(
 }
 
 /**
- * Extract contract address and token ID from a Yakoa ID
- * @param id - The Yakoa ID (format: contract:tokenId or contract:tokenId:timestamp)
+ * Extract contract address and token ID from an ID string
+ * @param id - The ID (format: contract:tokenId or contract:tokenId:timestamp)
  * @returns Object with contract address and token ID
  */
-export function parseYakoaId(id: string): { contractAddress: string; tokenId: string } {
+export function parseId(id: string): { contractAddress: string; tokenId: string } {
   const parts = id.split(':');
   if (parts.length < 2) {
-    throw new Error('Invalid Yakoa ID format');
+    throw new Error('Invalid ID format');
   }
   
   return {
     contractAddress: parts[0],
     tokenId: parts[1]
   };
-} 
+}
+
+// Legacy alias (deprecated - use parseId instead)
+export const parseYakoaId = parseId; 

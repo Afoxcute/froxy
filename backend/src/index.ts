@@ -3,12 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 
-import registerRoutes from './routes/register';
-import yakoaRoutes from './routes/yakoaRoutes';
-import licenseRoutes from './routes/license';
-import infringementRoutes from './routes/infringement';
-import arbitrationRoutes from './routes/arbitration';
-import ipAssetLockerRoutes from './routes/ip-asset-locker';
 import subscriptionRoutes from './routes/subscriptions';
 import serviceRoutes from './routes/services';
 
@@ -78,12 +72,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // API Routes
-app.use('/api/register', registerRoutes);
-app.use('/api/yakoa', yakoaRoutes);
-app.use('/api/license', licenseRoutes);
-app.use('/api/infringement', infringementRoutes);
-app.use('/api/arbitration', arbitrationRoutes);
-app.use('/api/ip-asset-locker', ipAssetLockerRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/services', serviceRoutes);
 
@@ -110,14 +98,9 @@ app.get('/health', async (_req, res) => {
 // Default route (optional)
 app.get('/', (_req, res) => {
   res.json({
-    message: '✅ Yakoa + Cronos Testnet + Arbitration backend is running!',
+    message: '✅ Smart Subscription Manager backend is running!',
     version: '1.0.0',
     endpoints: {
-      register: '/api/register',
-      yakoa: '/api/yakoa',
-      license: '/api/license',
-      arbitration: '/api/arbitration',
-      ipAssetLocker: '/api/ip-asset-locker',
       subscriptions: '/api/subscriptions',
       services: '/api/services',
       health: '/health',
