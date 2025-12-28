@@ -1,95 +1,59 @@
-# SeekerIP - Intellectual Property Asset Management Platform
+# Smart Subscription Manager
 
-SeekerIP is a comprehensive decentralized platform for managing intellectual property assets on the Hedera network. Built with React, TypeScript, and Solidity, it provides secure IP asset registration, compliance management, licensing, and KYC enforcement using Hedera Token Service (HTS).
+A decentralized subscription management platform built on Cronos Testnet. Manage recurring payments, track subscriptions, and automate payments using USDC.e tokens with the x402 payment protocol (EIP-3009).
 
 ## 🎯 Features
 
-### **Core IP Asset Management**
-- **IP Asset Registration**: Register and tokenize intellectual property assets as NFTs
-- **Asset Ownership**: Transfer and manage IP asset ownership
-- **Metadata Management**: Store comprehensive IP asset metadata on IPFS
-- **NFT Minting**: Automatic NFT creation for registered IP assets using Hedera HTS
+### **Subscription Management**
+- **Create Subscriptions**: Set up recurring subscriptions to services with customizable payment frequencies
+- **Auto-Pay**: Enable automatic payments for subscriptions when due
+- **Payment Tracking**: Complete transaction history with detailed payment records
+- **Service Management**: Create and manage payable services
+- **AI-Powered Suggestions**: Get intelligent recommendations for subscription cancellations based on usage
 
-### **Compliance & Regulatory Management**
-- **Multi-level Compliance**: Basic, Enhanced, and Institutional compliance levels
-- **Entity Verification**: Verify individuals, corporations, partnerships, LLCs, trusts, and more
-- **Jurisdiction Tracking**: Geographic compliance requirements and restrictions
-- **Permission Management**: Control who can hold, trade, and transfer IP assets
-- **Comprehensive Audit Trail**: Immutable blockchain-based audit logs for all compliance actions
-- **Violation Reporting**: Community-driven compliance monitoring and reporting
+### **Payment Processing**
+- **x402 Payment Protocol**: Secure payments using EIP-3009 Transfer with Authorization
+- **USDC.e Support**: Pay subscriptions using USDC.e tokens on Cronos Testnet
+- **Transaction History**: View detailed transaction history with explorer links
+- **Payment Status Tracking**: Monitor payment status (completed, pending, failed)
 
-### **KYC Management**
-- **Hedera KYC Integration**: Full integration with Hedera Token Service KYC
-- **Account Association**: Automatic account association with HTS tokens
-- **KYC Grant/Revoke**: Manage KYC status for IP asset holders
-- **Compliance-Based KYC**: KYC granting with compliance validation
-- **Access Control**: Prevent unauthorized distribution of IP rights
-
-### **Enhanced Licensing Management**
-- **License Types**: Exclusive, Non-Exclusive, and Sole licensing
-- **Geographic Restrictions**: Enforce country, region, or global restrictions
-- **Compliance Integration**: License holders must meet compliance requirements
-- **License Terms Management**: Create and manage comprehensive license terms
-- **Revenue Sharing**: Configure revenue sharing for license holders
-- **License Validation**: Multi-level validation before granting licenses
-
-### **Access Control**
-- **Compliance-Based Access**: Only verified entities can hold IP assets
-- **Transfer Validation**: Recipients must be compliance verified
-- **License Validation**: Licensees must meet compliance requirements
-- **Unauthorized Prevention**: Smart contract-level protection against unauthorized distribution
+### **User Experience**
+- **Modern UI**: Clean, responsive interface with glassmorphism design
+- **Real-time Notifications**: Toast notifications for all actions
+- **Wallet Integration**: Support for multiple wallets (MetaMask, Coinbase, Trust Wallet, etc.)
+- **Balance Display**: Real-time USDC.e balance display
+- **Collapsible Transaction Details**: Expandable transaction history with full details
 
 ## 🏗️ System Architecture
 
-### **Smart Contracts**
+### **Frontend**
+- **Framework**: React 18 with TypeScript
+- **Web3 Integration**: Thirdweb SDK v5
+- **State Management**: React Hooks and Context API
+- **Styling**: CSS Modules with modern design system
+- **Build Tool**: Vite
 
-#### **IPAssetManagerV2**
-- Core IP asset management contract
-- Handles registration, transfer, and licensing
-- Integrates with compliance and KYC systems
-- **Address**: `0xcBE19598bC8443616A55c0BeD139f9048cb50B06`
-
-#### **IPAssetHTSKYC**
-- Hedera Token Service NFT collection with KYC
-- Manages HTS token creation and KYC operations
-- **Address**: `0x4430248F3b2304F946f08c43A06C3451657FD658`
-- **HTS Token**: `0x00000000000000000000000000000000006c4167`
-
-#### **IPAssetComplianceManager**
-- Compliance verification and management
-- Multi-level compliance (Basic, Enhanced, Institutional)
-- Permission management (hold, trade, transfer)
-- Comprehensive audit trail
-- **Address**: `0x60A1d2CEf7fcdcf97d897ffd7c7908539978880c`
-
-#### **EnhancedLicensingManager**
-- Enhanced licensing with geographic restrictions
-- Exclusive/non-exclusive license management
-- Compliance-based license validation
-- **Address**: `0x84441AC3855C5a301044C1825375D5813adffA96`
-
-### **Frontend Architecture**
-
-- **Framework**: React with TypeScript
-- **Web3 Integration**: Thirdweb SDK
-- **State Management**: React Context API
-- **Styling**: CSS Modules
-- **IPFS Integration**: Pinata for metadata storage
-
-### **Backend Architecture**
-
+### **Backend**
 - **Framework**: Node.js with Express
-- **Web3**: Viem for contract interactions
-- **Database**: Prisma with SQLite
-- **IPFS**: Pinata integration for content storage
+- **Database**: PostgreSQL with Prisma ORM
+- **API**: RESTful API for subscription and service management
+- **Payment Recording**: Tracks all payment transactions on-chain
+
+### **Blockchain**
+- **Network**: Cronos Testnet (Chain ID: 338)
+- **Token**: USDC.e (ERC-20 compatible)
+- **Payment Protocol**: x402 (EIP-3009 Transfer with Authorization)
+- **RPC**: https://evm-t3.cronos.org
+- **Explorer**: https://explorer.cronos.org/testnet
 
 ## 🚀 Getting Started
 
 ### **Prerequisites**
 
-- Node.js 18+ and npm/yarn/pnpm
-- Hedera Testnet account with HBAR
+- Node.js 18+ and yarn
+- PostgreSQL database (local or cloud-hosted like Aiven)
 - MetaMask or compatible wallet
+- USDC.e tokens on Cronos Testnet for testing
 - Git
 
 ### **Installation**
@@ -97,7 +61,7 @@ SeekerIP is a comprehensive decentralized platform for managing intellectual pro
 1. **Clone the repository:**
 ```bash
 git clone <repository-url>
-cd seeker
+cd flenjo
 ```
 
 2. **Install dependencies:**
@@ -109,10 +73,6 @@ yarn install
 # Backend
 cd ../backend
 yarn install
-
-# Smart Contracts
-cd ../seeker-backend
-yarn install
 ```
 
 3. **Set up environment variables:**
@@ -120,28 +80,37 @@ yarn install
 **Frontend (`app/.env`):**
 ```env
 VITE_THIRDWEB_CLIENT_ID=your_thirdweb_client_id
-VITE_PINATA_JWT=your_pinata_jwt
+VITE_API_URL=http://localhost:5000/api
 ```
 
 **Backend (`backend/.env`):**
 ```env
-PRIVATE_KEY=your_hedera_private_key
-HEDERA_ACCOUNT_ID=your_hedera_account_id
-HEDERA_NETWORK=testnet
-PINATA_JWT=your_pinata_jwt
+DATABASE_URL=postgresql://username:password@host:port/database?sslmode=require
+PORT=5000
+RPC_PROVIDER_URL=https://evm-t3.cronos.org
+WALLET_PRIVATE_KEY=your_wallet_private_key
 ```
 
-4. **Run the development servers:**
+4. **Set up the database:**
 
-**Frontend:**
 ```bash
-cd app
-yarn dev
+cd backend
+npx prisma generate
+npx prisma migrate dev
 ```
+
+5. **Run the development servers:**
 
 **Backend:**
 ```bash
 cd backend
+yarn start
+# Or with custom port: yarn start -p 5001
+```
+
+**Frontend:**
+```bash
+cd app
 yarn dev
 ```
 
@@ -150,180 +119,180 @@ Open [http://localhost:5173](http://localhost:5173) to access the application.
 ## 📁 Project Structure
 
 ```
-seeker/
+flenjo/
 ├── app/                          # Frontend React application
 │   ├── src/
 │   │   ├── components/          # React components
-│   │   │   ├── KYCManagement.tsx
-│   │   │   ├── ComplianceManagement.tsx
-│   │   │   ├── EnhancedLicensingManagement.tsx
-│   │   │   └── ...
+│   │   │   ├── SubscriptionManager.tsx
+│   │   │   ├── SubscriptionCard.tsx
+│   │   │   ├── PaymentHistoryItem.tsx
+│   │   │   ├── CreateServiceForm.tsx
+│   │   │   ├── AISuggestions.tsx
+│   │   │   └── USDCBalance.tsx
 │   │   ├── services/            # Frontend services
-│   │   │   ├── kycService.ts
-│   │   │   ├── complianceService.ts
-│   │   │   ├── enhancedLicensingService.ts
-│   │   │   └── ...
-│   │   ├── abi/                 # Contract ABIs
-│   │   └── deployed_addresses.json
+│   │   │   ├── subscriptionService.ts
+│   │   │   ├── subscriptionApi.ts
+│   │   │   └── x402PaymentService.ts
+│   │   ├── contexts/            # React contexts
+│   │   │   └── NotificationContext.tsx
+│   │   └── layouts/             # Layout components
 │   └── package.json
 │
 ├── backend/                      # Backend API server
 │   ├── src/
-│   │   ├── controllers/         # API controllers
+│   │   ├── routes/             # API routes
+│   │   │   ├── subscriptions.ts
+│   │   │   └── services.ts
 │   │   ├── services/            # Business logic
-│   │   ├── config/              # Configuration
-│   │   └── utils/               # Utilities
+│   │   │   └── subscriptionService.ts
+│   │   ├── lib/                 # Utilities
+│   │   │   └── prisma.ts
+│   │   └── index.ts             # Entry point
+│   ├── prisma/
+│   │   ├── schema.prisma        # Database schema
+│   │   └── migrations/          # Database migrations
 │   └── package.json
-│
-├── seeker-backend/              # Smart contracts
-│   ├── contracts/               # Solidity contracts
-│   │   ├── IPAssetManagerV2.sol
-│   │   ├── IPAssetHTSKYC.sol
-│   │   ├── IPAssetComplianceManager.sol
-│   │   ├── EnhancedLicensingManager.sol
-│   │   └── ...
-│   ├── scripts/                 # Deployment scripts
-│   └── hardhat.config.cjs
 │
 └── README.md
 ```
 
-## 🔐 Compliance System
+## 📊 Database Schema
 
-### **Compliance Levels**
+### **Services**
+- Represents payable services that users can subscribe to
+- Fields: `id`, `name`, `description`, `cost`, `frequency`, `recipientAddress`, `isActive`
 
-- **Basic**: Identity verification, basic KYC (Individuals, small businesses)
-- **Enhanced**: Business registration, enhanced due diligence (Corporations, partnerships, LLCs)
-- **Institutional**: Full regulatory compliance (Trusts, large institutions)
+### **Subscriptions**
+- User subscriptions to services
+- Fields: `id`, `serviceId`, `userAddress`, `cost`, `frequency`, `recipientAddress`, `nextPaymentDate`, `autoPay`, `usageData`
 
-### **Entity Types Supported**
+### **Payments**
+- Records of payments made for subscriptions
+- Fields: `id`, `subscriptionId`, `amount`, `transactionHash`, `network`, `status`, `timestamp`
 
-- Individual
-- Corporation
-- Partnership
-- LLC
-- Trust
-- Government
-- Non-Profit
+## 🔌 API Endpoints
 
-### **Permission Types**
+### **Subscriptions**
+- `GET /api/subscriptions/user/:userAddress` - Get all subscriptions for a user
+- `GET /api/subscriptions/:id` - Get a single subscription
+- `POST /api/subscriptions` - Create a new subscription
+- `PUT /api/subscriptions/:id` - Update a subscription
+- `DELETE /api/subscriptions/:id` - Delete (deactivate) a subscription
+- `PATCH /api/subscriptions/:id/auto-pay` - Toggle auto-pay for a subscription
+- `GET /api/subscriptions/:id/payments` - Get payment history for a subscription
+- `POST /api/subscriptions/:id/payments` - Record a payment
 
-- **Hold IP Assets**: Permission to own IP assets
-- **Trade IP Assets**: Permission to trade/license IP assets
-- **Transfer IP Assets**: Permission to transfer IP assets
+### **Services**
+- `GET /api/services` - Get all active services
+- `POST /api/services` - Create a new service
 
-## 📄 Enhanced Licensing
+### **Health Check**
+- `GET /health` - Check database connectivity and server status
 
-### **License Types**
+## 💳 Payment Flow
 
-- **Exclusive**: Only one licensee allowed
-- **Non-Exclusive**: Multiple licensees allowed
-- **Sole**: Owner + one licensee allowed
+1. **User connects wallet** with USDC.e balance
+2. **Creates subscription** to a service
+3. **Enables auto-pay** (optional) for automatic payments
+4. **Payment processing**:
+   - When payment is due, system generates EIP-712 signature
+   - Creates EIP-3009 payment header
+   - Submits to x402 payment facilitator
+   - Records transaction hash in database
+5. **Transaction history** is tracked and displayed
 
-### **Geographic Restrictions**
+## 🎨 Features in Detail
 
-- **None**: No geographic restrictions
-- **Country**: Country-level restrictions
-- **Region**: Regional restrictions (e.g., EU, US)
-- **Global**: Global restrictions
+### **Subscription Management**
+- Create subscriptions with monthly, weekly, or yearly frequencies
+- Set custom costs per subscription
+- Enable/disable auto-pay per subscription
+- Track next payment dates
+- View usage statistics
 
-### **License Features**
+### **AI Suggestions**
+- Analyzes subscription usage patterns
+- Suggests cancellations for unused subscriptions
+- Provides cost-saving recommendations
 
-- Compliance-based validation
-- Jurisdiction enforcement
-- Revenue sharing configuration
-- Expiration management
-- Revocation with reason tracking
+### **Transaction History**
+- Collapsible transaction cards
+- Full transaction details including:
+  - Transaction hash with explorer link
+  - Payment amount
+  - Status (completed, pending, failed)
+  - Network information
+  - Date and time
+  - Error messages (if any)
 
-## 🛡️ Security Features
+## 🔧 Configuration
 
-- **Smart Contract Access Control**: All operations validated at contract level
-- **Compliance Validation**: Multi-level compliance checking
-- **KYC Enforcement**: Hedera HTS KYC integration
-- **Audit Trail**: Immutable blockchain logging
-- **Violation Reporting**: Community-driven compliance monitoring
+### **Network Configuration**
+The system is configured for Cronos Testnet:
+- Chain ID: 338
+- RPC URL: https://evm-t3.cronos.org
+- Explorer: https://explorer.cronos.org/testnet
+- Token: USDC.e (ERC-20)
 
-## 📊 Usage Guide
-
-### **1. Register an IP Asset**
-
-1. Navigate to "📝 Register IP" tab
-2. Upload your IP asset file
-3. Fill in asset details (name, description, tags)
-4. Set license type and commercial use permissions
-5. Click "Register IP Asset"
-6. Wait for transaction confirmation
-
-### **2. Manage KYC**
-
-1. Navigate to "🔐 KYC Management" tab
-2. Check KYC status for accounts
-3. Grant KYC (requires compliance verification)
-4. Revoke KYC if needed
-5. View account association status
-
-### **3. Compliance Management**
-
-1. Navigate to "🔐 KYC Management" → "🏛️ Compliance & Regulatory Management"
-2. **Verify Compliance**: Verify entity compliance status
-3. **Manage Officers**: Add/remove compliance officers
-4. **View Audit Trail**: Review compliance history
-5. **Report Violations**: Report compliance violations
-
-### **4. Enhanced Licensing**
-
-1. Navigate to "🎫 License Management" tab
-2. **Create License Terms**: Set up license terms with restrictions
-3. **Grant License**: Grant licenses to compliant entities
-4. **Manage Licenses**: Revoke or manage existing licenses
-5. **View Licenses**: View all license terms and holders
-
-## 🔧 Deployment
-
-### **Deploy Smart Contracts**
-
-```bash
-cd seeker-backend
-
-# Deploy compliance system
-npx hardhat run scripts/deployComplianceSystemSimple.cjs --network hedera_testnet
-
-# Deploy enhanced licensing manager
-npx hardhat run scripts/deployEnhancedLicensingManager.cjs --network hedera_testnet
-```
-
-### **Update Contract Addresses**
-
-After deployment, update contract addresses in:
-- `app/src/deployed_addresses.json`
-- `backend/src/config/contracts.ts`
+### **Payment Protocol**
+Uses x402 payment facilitator with EIP-3009:
+- Transfer with Authorization
+- Gasless payments (sponsored transactions)
+- Secure signature-based authentication
 
 ## 📚 Documentation
 
-- [IP Asset Compliance System](./IP-ASSET-COMPLIANCE-SYSTEM.md)
-- [Enhanced Licensing Management](./ENHANCED-LICENSING-MANAGEMENT-IMPLEMENTATION-COMPLETE.md)
-- [IP Asset Access Control](./IP-ASSET-ACCESS-CONTROL-IMPLEMENTATION-COMPLETE.md)
-- [Compliance Integration](./COMPLIANCE-UNDER-KYC-INTEGRATION-COMPLETE.md)
+- [Database Setup Guide](./DATABASE_SETUP.md)
+- [Backend Setup Guide](./BACKEND-SETUP-GUIDE.md)
+- [Hedera to Cronos Migration](./HEDERA_TO_CRONOS_MIGRATION.md)
 
 ## 🧪 Testing
 
-### **Test IP Asset Registration**
-1. Ensure you have compliance verification
-2. Register a test IP asset
-3. Verify NFT minting
-4. Check metadata on IPFS
+### **Test Subscription Creation**
+1. Connect your wallet
+2. Ensure you have USDC.e tokens
+3. Create a test service
+4. Subscribe to the service
+5. Verify subscription appears in the list
 
-### **Test Compliance System**
-1. Verify entity compliance
-2. Test permission checks
-3. Review audit trail
-4. Test violation reporting
+### **Test Payment Processing**
+1. Create a subscription
+2. Enable auto-pay or manually pay
+3. Approve the transaction in your wallet
+4. Verify payment appears in transaction history
+5. Check transaction on Cronos explorer
 
-### **Test Enhanced Licensing**
-1. Create license terms
-2. Grant license to compliant entity
-3. Test geographic restrictions
-4. Verify exclusivity controls
+### **Test Auto-Pay**
+1. Create a subscription with auto-pay enabled
+2. Wait for payment due date
+3. System automatically processes payment
+4. Verify payment in transaction history
+
+## 🛠️ Development
+
+### **Backend Development**
+```bash
+cd backend
+yarn start          # Start server on default port (5000)
+yarn start -p 5001  # Start server on custom port
+yarn build          # Build TypeScript
+```
+
+### **Frontend Development**
+```bash
+cd app
+yarn dev            # Start dev server
+yarn build          # Build for production
+yarn preview        # Preview production build
+```
+
+### **Database Management**
+```bash
+cd backend
+npx prisma studio   # Open Prisma Studio (database GUI)
+npx prisma migrate dev  # Create new migration
+npx prisma generate     # Generate Prisma Client
+```
 
 ## 🤝 Contributing
 
@@ -335,9 +304,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🔗 Links
 
-- **Hedera Testnet Explorer**: [HashScan](https://testnet.hashscan.io)
-- **Hedera Documentation**: [docs.hedera.com](https://docs.hedera.com)
+- **Cronos Testnet Explorer**: [Cronos Explorer](https://explorer.cronos.org/testnet)
 - **Thirdweb Documentation**: [portal.thirdweb.com](https://portal.thirdweb.com)
+- **EIP-3009 Specification**: [EIP-3009](https://eips.ethereum.org/EIPS/eip-3009)
+- **x402 Payment Protocol**: [x402 Documentation](https://docs.x402.com)
 
 ## 📞 Support
 
@@ -345,4 +315,4 @@ For issues, questions, or contributions, please open an issue on GitHub.
 
 ---
 
-**Built with ❤️ for the Hedera ecosystem**
+**Built with ❤️ for decentralized subscription management on Cronos**
