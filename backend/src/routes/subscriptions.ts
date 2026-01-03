@@ -153,6 +153,67 @@ router.get('/:id/payments', async (req, res) => {
   }
 });
 
+// Manually trigger auto-pay for a subscription
+router.post('/:id/trigger-payment', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const subscription = await subscriptionService.getSubscription(id);
+
+    if (!subscription) {
+      return res.status(404).json({
+        success: false,
+        error: 'Subscription not found',
+      });
+    }
+
+    if (!subscription.isActive) {
+      return res.status(400).json({
+        success: false,
+        error: 'Subscription is not active',
+      });
+    }
+
+    if (!subscription.autoPay) {
+      return res.status(400).json({
+        success: false,
+        error: 'Auto-pay is not enabled for this subscription',
+      });
+    }
+
+    // Import here to avoid circular dependency
+    const { addAutoPayJob } = require('../queue/autoPayQueue');
+    
+    const amount = typeof subscription.cost === 'object' && 'toNumber' in subscription.cost
+      ? (subscription.cost as any).toNumber()
+      : typeof subscription.cost === 'string'
+      ? parseFloat(subscription.cost)
+      : subscription.cost;
+
+    const job = await addAutoPayJob({
+      subscriptionId: subscription.id,
+      userAddress: subscription.userAddress,
+      amount,
+      recipientAddress: subscription.recipientAddress,
+      serviceName: subscription.service?.name || 'Unknown Service',
+    });
+
+    res.json({
+      success: true,
+      message: 'Payment job queued successfully',
+      data: {
+        jobId: job.id.toString(),
+        subscriptionId: subscription.id,
+      },
+    });
+  } catch (error: any) {
+    console.error('Error triggering payment:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to trigger payment',
+    });
+  }
+});
+
 export default router;
 
 

@@ -12,4 +12,33 @@ export default defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    include: [
+      'thirdweb',
+      'thirdweb/react',
+      'thirdweb/wallets',
+    ],
+    // Exclude problematic dynamic imports from pre-bundling
+    exclude: [],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'thirdweb-core': ['thirdweb'],
+          'thirdweb-react': ['thirdweb/react'],
+          'thirdweb-wallets': ['thirdweb/wallets'],
+        },
+      },
+    },
+    commonjsOptions: {
+      include: [/thirdweb/, /node_modules/],
+    },
+  },
+  server: {
+    fs: {
+      // Allow serving files from one level up to the project root
+      allow: ['..'],
+    },
+  },
 })

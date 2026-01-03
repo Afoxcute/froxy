@@ -399,8 +399,54 @@ export class X402PaymentService {
   }
 
   /**
+   * Get the preferred EVM wallet provider (MetaMask preferred, excludes Phantom)
+   */
+  private getPreferredEVMProvider(): any {
+    if (typeof window === 'undefined') return null;
+    
+    const ethereum = (window as any).ethereum;
+    if (!ethereum) return null;
+    
+    // If multiple providers are available (e.g., both MetaMask and Phantom)
+    if (ethereum.providers && Array.isArray(ethereum.providers)) {
+      // First, try to find MetaMask
+      const metaMaskProvider = ethereum.providers.find((p: any) => p.isMetaMask);
+      if (metaMaskProvider) {
+        console.log('[X402] Selected MetaMask from multiple providers');
+        return metaMaskProvider;
+      }
+      
+      // Then, find any non-Phantom provider
+      const nonPhantomProvider = ethereum.providers.find((p: any) => !p.isPhantom);
+      if (nonPhantomProvider) {
+        console.log('[X402] Selected non-Phantom EVM wallet from multiple providers');
+        return nonPhantomProvider;
+      }
+      
+      // Fallback to first provider if no better option
+      console.warn('[X402] No MetaMask found, using first available provider');
+      return ethereum.providers[0];
+    }
+    
+    // Single provider case
+    if (ethereum.isPhantom) {
+      console.warn('[X402] Phantom detected but not supported for EVM. Please use MetaMask or another EVM wallet.');
+      return null; // Don't use Phantom for EVM
+    }
+    
+    if (ethereum.isMetaMask) {
+      console.log('[X402] Using MetaMask');
+    } else {
+      console.log('[X402] Using detected EVM wallet');
+    }
+    
+    return ethereum;
+  }
+
+  /**
    * Sign typed data using ethers (following x402 guide)
    * Properly handles thirdweb accounts and browser wallets
+   * Prioritizes MetaMask and excludes Phantom
    */
   private async signTypedData(
     account: any,
@@ -414,13 +460,15 @@ export class X402PaymentService {
       : 'https://evm.cronos.org';
     
     try {
-      // Priority 1: Use browser wallet (MetaMask, etc.) if available
-      // This is the most reliable method for EIP-712 signing
-      if (typeof window !== 'undefined' && (window as any).ethereum) {
+      // Priority 1: Use MetaMask specifically (not Phantom or other Solana wallets)
+      // This is the most reliable method for EIP-712 signing on EVM chains
+      const provider = this.getPreferredEVMProvider();
+      
+      if (provider) {
         try {
-          const ethersProvider = new ethers.BrowserProvider((window as any).ethereum);
+          const ethersProvider = new ethers.BrowserProvider(provider);
           // Request account access if needed
-          await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+          await provider.request({ method: 'eth_requestAccounts' });
           
           // Check if we're on the correct network
           const network = await ethersProvider.getNetwork();
@@ -429,7 +477,7 @@ export class X402PaymentService {
             console.warn(`Network mismatch: expected ${expectedChainId}, got ${network.chainId}`);
             // Try to switch network
             try {
-              await (window as any).ethereum.request({
+              await provider.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: `0x${expectedChainId.toString(16)}` }],
               });
@@ -451,7 +499,7 @@ export class X402PaymentService {
                       rpcUrls: ['https://evm.cronos.org'],
                       blockExplorerUrls: ['https://explorer.cronos.org'],
                     };
-                await (window as any).ethereum.request({
+                await provider.request({
                   method: 'wallet_addEthereumChain',
                   params: [chainConfig],
                 });
@@ -493,17 +541,20 @@ export class X402PaymentService {
       }
 
       // Priority 3: Try to get signer from thirdweb account
-      // For thirdweb accounts, we need to use the underlying wallet
-      if (account && typeof window !== 'undefined' && (window as any).ethereum) {
-        const ethersProvider = new ethers.BrowserProvider((window as any).ethereum);
-        const signer = await ethersProvider.getSigner(account.address);
-        
-        const domainWithNumberChainId = {
-          ...domain,
-          chainId: typeof domain.chainId === 'string' ? parseInt(domain.chainId, 10) : domain.chainId,
-        };
-        
-        return await signer.signTypedData(domainWithNumberChainId, types, message);
+      // For thirdweb accounts, we need to use the underlying wallet (but not Phantom)
+      if (account) {
+        const provider = this.getPreferredEVMProvider();
+        if (provider) {
+          const ethersProvider = new ethers.BrowserProvider(provider);
+          const signer = await ethersProvider.getSigner(account.address);
+          
+          const domainWithNumberChainId = {
+            ...domain,
+            chainId: typeof domain.chainId === 'string' ? parseInt(domain.chainId, 10) : domain.chainId,
+          };
+          
+          return await signer.signTypedData(domainWithNumberChainId, types, message);
+        }
       }
     } catch (error) {
       console.error('Signing error:', error);

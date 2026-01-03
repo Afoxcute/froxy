@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 
 import subscriptionRoutes from './routes/subscriptions';
 import serviceRoutes from './routes/services';
+import './queue/autoPayWorker'; // Initialize auto-pay worker
+import { startPaymentScheduler } from './services/paymentScheduler';
 
 // Load environment variables
 dotenv.config();
@@ -75,14 +77,32 @@ app.use(bodyParser.json());
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/services', serviceRoutes);
 
+// Import and use jobs routes
+import jobsRoutes from './routes/jobs';
+app.use('/api/jobs', jobsRoutes);
+
 // Health check endpoint
 app.get('/health', async (_req, res) => {
   try {
     // Test database connection
     await prisma.$queryRaw`SELECT 1`;
+    
+    // Test Redis connection (hardcoded in autoPayQueue.ts)
+    let redisStatus = 'unknown';
+    try {
+      const { autoPayQueue } = await import('./queue/autoPayQueue');
+      const queue = autoPayQueue(); // Call the getter function
+      const client = queue.client;
+      await client.ping();
+      redisStatus = 'connected';
+    } catch (redisError: any) {
+      redisStatus = `disconnected: ${redisError.message}`;
+    }
+
     res.json({
       status: 'healthy',
       database: 'connected',
+      redis: redisStatus,
       timestamp: new Date().toISOString(),
     });
   } catch (error: any) {
@@ -103,6 +123,7 @@ app.get('/', (_req, res) => {
     endpoints: {
       subscriptions: '/api/subscriptions',
       services: '/api/services',
+      jobs: '/api/jobs',
       health: '/health',
     }
   });
@@ -130,4 +151,33 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
 // Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Backend server running at http://localhost:${PORT}`);
+  
+  // Start payment scheduler (checks every 5 minutes)
+  // Requires Redis configuration in .env file
+  const redisUrl = process.env.REDIS_URL || 
+    (process.env.REDIS_USERNAME && process.env.REDIS_PASSWORD && process.env.REDIS_HOST && process.env.REDIS_PORT);
+  
+  if (redisUrl) {
+    try {
+      const schedulerInterval = startPaymentScheduler(5);
+      console.log('✅ Payment scheduler started');
+      
+      // Clean up on shutdown
+      process.on('SIGTERM', () => {
+        clearInterval(schedulerInterval);
+        console.log('Payment scheduler stopped');
+      });
+      
+      process.on('SIGINT', () => {
+        clearInterval(schedulerInterval);
+        console.log('Payment scheduler stopped');
+      });
+    } catch (error: any) {
+      console.error('❌ Failed to start payment scheduler:', error.message);
+      console.warn('⚠️  Payment scheduler disabled - check Redis configuration');
+    }
+  } else {
+    console.warn('⚠️  Redis configuration not found - payment scheduler disabled');
+    console.warn('   Please set REDIS_URL or REDIS_USERNAME, REDIS_PASSWORD, REDIS_HOST, REDIS_PORT in .env file');
+  }
 });
