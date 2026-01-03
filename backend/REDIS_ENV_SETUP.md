@@ -27,7 +27,7 @@ REDIS_URL=redis://username:password@host:port
 
 **Example:**
 ```env
-REDIS_URL=redis://default:WsjE9g4MJCwrcmyXL0dR80etUIAZ8sOZ@redis-15358.c15.us-east-1-2.ec2.cloud.redislabs.com:15358
+
 ```
 
 #### Option 2: Individual Components
@@ -46,7 +46,7 @@ REDIS_PORT=15358
 DATABASE_URL=postgresql://user:password@host:port/database
 
 # Redis Configuration (REQUIRED for auto-pay queue)
-REDIS_URL=redis://default:WsjE9g4MJCwrcmyXL0dR80etUIAZ8sOZ@redis-15358.c15.us-east-1-2.ec2.cloud.redislabs.com:15358
+
 
 # Server Configuration
 PORT=5000
@@ -145,7 +145,7 @@ If you were using the previous hardcoded configuration, you need to:
 1. Create `.env` file
 2. Add your Redis credentials:
    ```env
-   REDIS_URL=redis://default:WsjE9g4MJCwrcmyXL0dR80etUIAZ8sOZ@redis-15358.c15.us-east-1-2.ec2.cloud.redislabs.com:15358
+
    ```
 3. Restart the backend server
 

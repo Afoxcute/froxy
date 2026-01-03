@@ -20,7 +20,7 @@ DATABASE_URL=postgresql://user:password@host:port/database
 
 # Redis Configuration (REQUIRED for auto-pay queue)
 # Option 1: Full connection string (recommended)
-REDIS_URL=redis://default:WsjE9g4MJCwrcmyXL0dR80etUIAZ8sOZ@redis-15358.c15.us-east-1-2.ec2.cloud.redislabs.com:15358
+
 
 # Option 2: Individual components (used if REDIS_URL is not set)
 # REDIS_USERNAME=default
