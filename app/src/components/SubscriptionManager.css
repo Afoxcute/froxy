@@ -12,13 +12,15 @@
 }
 
 .stat-card {
-  background: var(--color-bg-glass);
+  background: rgba(15, 23, 42, 0.8) !important;
   backdrop-filter: blur(20px);
-  border: 1px solid var(--color-border-primary);
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
   border-radius: var(--radius-xl);
   padding: 1.5rem;
   text-align: center;
   transition: all var(--transition-normal);
+  /* Ensure text is visible */
+  color: #ffffff !important;
 }
 
 .stat-card:hover {
@@ -29,7 +31,7 @@
 
 .stat-label {
   font-size: 0.875rem;
-  color: var(--color-text-secondary);
+  color: #e2e8f0 !important;
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
@@ -37,16 +39,15 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-text-primary);
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Use solid color instead of gradient for better visibility */
+  color: #ffffff !important;
+  /* Remove gradient text effect that causes invisibility */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .stat-value.warning {
-  color: var(--color-warning);
-  -webkit-text-fill-color: var(--color-warning);
+  color: #fbbf24 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Toggle Switch */

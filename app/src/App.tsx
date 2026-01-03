@@ -4,6 +4,7 @@ import { useNotificationHelpers } from "./contexts/NotificationContext";
 import { NotificationButton } from "./components/NotificationButton";
 import { NotificationToasts } from "./components/NotificationCenter";
 import SubscriptionManager from "./components/SubscriptionManager";
+import RevenueAnalytics from "./pages/RevenueAnalytics";
 import USDCBalance from "./components/USDCBalance";
 
 import {
@@ -35,6 +36,7 @@ interface AppProps {
 
 export default function App({ thirdwebClient }: AppProps) {
   const { notifySuccess, notifyError } = useNotificationHelpers();
+  const [activeView, setActiveView] = useState<'subscriptions' | 'analytics'>('subscriptions');
 
   // Initialize subscription agent
   const [subscriptionAgent] = useState<SubscriptionAgent>(() => 
@@ -64,17 +66,37 @@ export default function App({ thirdwebClient }: AppProps) {
         </div>
       </header>
 
+      {/* Navigation Tabs */}
+      <div className="main-nav">
+        <button
+          className={activeView === 'subscriptions' ? 'active' : ''}
+          onClick={() => setActiveView('subscriptions')}
+        >
+          📋 Subscriptions
+        </button>
+        <button
+          className={activeView === 'analytics' ? 'active' : ''}
+          onClick={() => setActiveView('analytics')}
+        >
+          📊 Analytics
+        </button>
+      </div>
+
       <div className="main-content">
         <div className="tab-content">
-          <SubscriptionManager
-            subscriptionAgent={subscriptionAgent}
-            onSuccess={(message) => {
-              notifySuccess('Success', message);
-            }}
-            onError={(message) => {
-              notifyError('Error', message);
-            }}
-          />
+          {activeView === 'subscriptions' ? (
+            <SubscriptionManager
+              subscriptionAgent={subscriptionAgent}
+              onSuccess={(message) => {
+                notifySuccess('Success', message);
+              }}
+              onError={(message) => {
+                notifyError('Error', message);
+              }}
+            />
+          ) : (
+            <RevenueAnalytics />
+          )}
         </div>
       </div>
     </div>

@@ -156,3 +156,196 @@ export const subscriptionApi = {
   },
 };
 
+// Statistics API Types
+export interface StatisticsSummary {
+  totalPayments: number;
+  completedPayments: number;
+  failedPayments: number;
+  successRate: number;
+  totalRevenue: number;
+  averagePaymentAmount: number;
+  activeServices: number;
+  uniquePayers: number;
+  period: {
+    startDate: string | null;
+    endDate: string | null;
+  };
+}
+
+export interface RevenueByService {
+  serviceId: string;
+  serviceName: string;
+  totalRevenue: number;
+  paymentCount: number;
+  averageAmount: number;
+}
+
+export interface PaymentSuccessRates {
+  total: number;
+  completed: number;
+  failed: number;
+  pending: number;
+  successRate: number;
+  failureRate: number;
+  breakdown: Array<{
+    status: string;
+    count: number;
+    percentage: number;
+  }>;
+}
+
+export interface ServiceBreakdown {
+  serviceId: string;
+  serviceName: string;
+  totalRevenue: number;
+  paymentCount: number;
+  averageAmount: number;
+  minAmount: number;
+  maxAmount: number;
+  uniquePayers: number;
+  frequencyBreakdown: Record<string, number>;
+}
+
+export interface RecentReceipt {
+  id: string;
+  amount: number;
+  transactionHash: string;
+  network: string;
+  status: string;
+  errorMessage?: string;
+  timestamp: string;
+  payer: {
+    address: string;
+  };
+  service: {
+    id: string;
+    name: string;
+  };
+  subscription: {
+    id: string;
+    frequency: string;
+  };
+}
+
+export interface PayerReceipts {
+  payer: string;
+  totalReceipts: number;
+  totalAmount: number;
+  completedCount: number;
+  failedCount: number;
+  receipts: Array<{
+    id: string;
+    amount: number;
+    transactionHash: string;
+    network: string;
+    status: string;
+    errorMessage?: string;
+    timestamp: string;
+    service: {
+      id: string;
+      name: string;
+    };
+    subscription: {
+      id: string;
+      frequency: string;
+    };
+  }>;
+}
+
+export const statisticsApi = {
+  /**
+   * Get overall statistics summary
+   */
+  async getSummary(startDate?: string, endDate?: string): Promise<StatisticsSummary> {
+    const params: any = {};
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
+    
+    const response = await api.get('/statistics/summary', { params });
+    return response.data.data;
+  },
+
+  /**
+   * Get revenue statistics by service
+   */
+  async getRevenueByService(startDate?: string, endDate?: string): Promise<RevenueByService[]> {
+    const params: any = {};
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
+    
+    const response = await api.get('/statistics/revenue-by-service', { params });
+    return response.data.data;
+  },
+
+  /**
+   * Get payment success/failure rates
+   */
+  async getSuccessRates(startDate?: string, endDate?: string): Promise<PaymentSuccessRates> {
+    const params: any = {};
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
+    
+    const response = await api.get('/statistics/success-rates', { params });
+    return response.data.data;
+  },
+
+  /**
+   * Get detailed service breakdown analytics
+   */
+  async getServiceBreakdown(startDate?: string, endDate?: string): Promise<ServiceBreakdown[]> {
+    const params: any = {};
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
+    
+    const response = await api.get('/statistics/service-breakdown', { params });
+    return response.data.data;
+  },
+
+  /**
+   * Get recent receipts
+   */
+  async getRecentReceipts(options?: {
+    limit?: number;
+    startDate?: string;
+    endDate?: string;
+    status?: string;
+    serviceId?: string;
+    userAddress?: string;
+  }): Promise<RecentReceipt[]> {
+    const params: any = {};
+    if (options?.limit) params.limit = options.limit;
+    if (options?.startDate) params.startDate = options.startDate;
+    if (options?.endDate) params.endDate = options.endDate;
+    if (options?.status) params.status = options.status;
+    if (options?.serviceId) params.serviceId = options.serviceId;
+    if (options?.userAddress) params.userAddress = options.userAddress;
+    
+    const response = await api.get('/statistics/receipts/recent', { params });
+    return response.data.data;
+  },
+
+  /**
+   * Get payer-specific receipts
+   */
+  async getPayerReceipts(
+    userAddress: string,
+    options?: {
+      startDate?: string;
+      endDate?: string;
+      status?: string;
+      serviceId?: string;
+      limit?: number;
+    }
+  ): Promise<PayerReceipts> {
+    const params: any = {};
+    if (options?.startDate) params.startDate = options.startDate;
+    if (options?.endDate) params.endDate = options.endDate;
+    if (options?.status) params.status = options.status;
+    if (options?.serviceId) params.serviceId = options.serviceId;
+    if (options?.limit) params.limit = options.limit;
+    
+    const response = await api.get(`/statistics/receipts/payer/${userAddress}`, { params });
+    return response.data.data;
+  },
+};
+
