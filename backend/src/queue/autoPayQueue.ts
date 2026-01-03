@@ -55,13 +55,17 @@ function initializeQueue(): Bull.Queue<AutoPayJobData> {
 
     autoPayQueue = new Bull<AutoPayJobData>('auto-pay', redisUrl, {
       defaultJobOptions: {
-        attempts: 3,
+        attempts: 5, // Increased max attempts for better retry coverage
         backoff: {
           type: 'exponential',
-          delay: 2000, // Start with 2 seconds, then 4s, 8s, etc.
+          delay: 2000, // Start with 2 seconds, then 4s, 8s, 16s, 32s
         },
         removeOnComplete: 100, // Keep last 100 completed jobs
-        removeOnFail: false, // Keep failed jobs for debugging
+        removeOnFail: false, // Keep failed jobs for debugging and analysis
+      },
+      settings: {
+        retryProcessDelay: 5000, // Delay before retrying failed jobs
+        maxStalledCount: 2, // Max times a job can be stalled before being marked as failed
       },
     });
 

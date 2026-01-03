@@ -85,6 +85,10 @@ app.use('/api/jobs', jobsRoutes);
 import statisticsRoutes from './routes/statistics';
 app.use('/api/statistics', statisticsRoutes);
 
+// Import and use failed payments routes
+import failedPaymentsRoutes from './routes/failedPayments';
+app.use('/api/failed-payments', failedPaymentsRoutes);
+
 // Health check endpoint
 app.get('/health', async (_req, res) => {
   try {
@@ -129,6 +133,7 @@ app.get('/', (_req, res) => {
       services: '/api/services',
       jobs: '/api/jobs',
       statistics: '/api/statistics',
+      failedPayments: '/api/failed-payments',
       health: '/health',
     }
   });

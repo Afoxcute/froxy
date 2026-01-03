@@ -349,3 +349,61 @@ export const statisticsApi = {
   },
 };
 
+// Failed Payment Types
+export interface FailedPayment {
+  id: string;
+  subscriptionId: string;
+  userAddress: string;
+  amount: number;
+  errorCategory: string;
+  errorMessage: string;
+  attemptNumber: number;
+  timestamp: string;
+  retryable: boolean;
+  nextRetryAt?: string;
+}
+
+export interface FailedPaymentStats {
+  total: number;
+  byCategory: Record<string, number>;
+  retryable: number;
+  nonRetryable: number;
+  recentFailures: FailedPayment[];
+}
+
+export interface FailedPaymentsResponse {
+  subscriptionId: string;
+  failedPayments: FailedPayment[];
+  count: number;
+}
+
+export const failedPaymentsApi = {
+  /**
+   * Get failed payments for a subscription
+   */
+  async getFailedPayments(subscriptionId: string, limit: number = 10): Promise<FailedPaymentsResponse> {
+    const params: any = {};
+    if (limit) params.limit = limit;
+    
+    const response = await api.get(`/failed-payments/subscription/${subscriptionId}`, { params });
+    return response.data.data;
+  },
+
+  /**
+   * Get failed payment statistics
+   */
+  async getFailedPaymentStats(options?: {
+    userAddress?: string;
+    startDate?: string;
+    endDate?: string;
+  }): Promise<FailedPaymentStats> {
+    const params: any = {};
+    if (options?.userAddress) params.userAddress = options.userAddress;
+    if (options?.startDate) params.startDate = options.startDate;
+    if (options?.endDate) params.endDate = options.endDate;
+    
+    const response = await api.get('/failed-payments/stats', { params });
+    return response.data.data;
+  },
+};
+

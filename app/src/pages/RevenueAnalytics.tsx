@@ -8,12 +8,14 @@ import {
   ServiceBreakdown,
   RecentReceipt,
   PayerReceipts,
+  failedPaymentsApi,
+  FailedPaymentStats,
 } from "../services/subscriptionApi";
 import "./RevenueAnalytics.css";
 
 export default function RevenueAnalytics() {
   const account = useActiveAccount();
-  const [activeTab, setActiveTab] = useState<'summary' | 'revenue' | 'success' | 'breakdown' | 'receipts'>('summary');
+  const [activeTab, setActiveTab] = useState<'summary' | 'revenue' | 'success' | 'breakdown' | 'receipts' | 'failed'>('summary');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,6 +30,7 @@ export default function RevenueAnalytics() {
   const [serviceBreakdown, setServiceBreakdown] = useState<ServiceBreakdown[]>([]);
   const [recentReceipts, setRecentReceipts] = useState<RecentReceipt[]>([]);
   const [payerReceipts, setPayerReceipts] = useState<PayerReceipts | null>(null);
+  const [failedPaymentsStats, setFailedPaymentsStats] = useState<FailedPaymentStats | null>(null);
 
   // Load data based on active tab
   useEffect(() => {
@@ -79,6 +82,13 @@ export default function RevenueAnalytics() {
             });
             setRecentReceipts(recentData);
           }
+          break;
+        case 'failed':
+          const failedStats = await failedPaymentsApi.getFailedPaymentStats({
+            userAddress: account?.address,
+            ...dateParams,
+          });
+          setFailedPaymentsStats(failedStats);
           break;
       }
     } catch (err) {
@@ -170,6 +180,12 @@ export default function RevenueAnalytics() {
           onClick={() => setActiveTab('receipts')}
         >
           🧾 Receipts
+        </button>
+        <button
+          className={activeTab === 'failed' ? 'active' : ''}
+          onClick={() => setActiveTab('failed')}
+        >
+          ⚠️ Failed Payments
         </button>
       </div>
 
@@ -439,6 +455,95 @@ export default function RevenueAnalytics() {
                       </table>
                     </div>
                   </>
+                )}
+              </div>
+            )}
+
+            {/* Failed Payments Tab */}
+            {activeTab === 'failed' && failedPaymentsStats && (
+              <div className="failed-payments-section">
+                <div className="failed-payments-summary">
+                  <h3>Failed Payment Statistics</h3>
+                  <div className="summary-stats">
+                    <div className="stat-card">
+                      <h4>Total Failures</h4>
+                      <p className="stat-value">{failedPaymentsStats.total}</p>
+                    </div>
+                    <div className="stat-card">
+                      <h4>Retryable</h4>
+                      <p className="stat-value">{failedPaymentsStats.retryable}</p>
+                    </div>
+                    <div className="stat-card">
+                      <h4>Non-Retryable</h4>
+                      <p className="stat-value">{failedPaymentsStats.nonRetryable}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Failure Categories */}
+                {Object.keys(failedPaymentsStats.byCategory).length > 0 && (
+                  <div className="failure-categories">
+                    <h3>Failures by Category</h3>
+                    <div className="category-list">
+                      {Object.entries(failedPaymentsStats.byCategory).map(([category, count]) => (
+                        <div key={category} className="category-item">
+                          <span className="category-name">{category.replace(/_/g, ' ')}</span>
+                          <span className="category-count">{count}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Recent Failures */}
+                {failedPaymentsStats.recentFailures.length > 0 && (
+                  <div className="recent-failures">
+                    <h3>Recent Failures</h3>
+                    <div className="receipts-table">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Error</th>
+                            <th>Attempt</th>
+                            <th>Retryable</th>
+                            <th>Next Retry</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {failedPaymentsStats.recentFailures.map((failure) => (
+                            <tr key={failure.id}>
+                              <td>{formatDate(failure.timestamp)}</td>
+                              <td className="amount">{formatCurrency(failure.amount)}</td>
+                              <td>
+                                <span className={`category-badge ${failure.errorCategory.toLowerCase()}`}>
+                                  {failure.errorCategory.replace(/_/g, ' ')}
+                                </span>
+                              </td>
+                              <td className="error-message">{failure.errorMessage}</td>
+                              <td>{failure.attemptNumber}</td>
+                              <td>
+                                <span className={`retryable-badge ${failure.retryable ? 'yes' : 'no'}`}>
+                                  {failure.retryable ? 'Yes' : 'No'}
+                                </span>
+                              </td>
+                              <td>
+                                {failure.nextRetryAt ? formatDate(failure.nextRetryAt) : 'N/A'}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {failedPaymentsStats.recentFailures.length === 0 && (
+                  <div className="empty-state">
+                    <p>No failed payments found</p>
+                  </div>
                 )}
               </div>
             )}

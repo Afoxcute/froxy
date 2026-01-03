@@ -486,3 +486,125 @@
   }
 }
 
+/* Failed Payments Section */
+.failed-payments-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.failed-payments-summary {
+  background: rgba(15, 23, 42, 0.8) !important;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.failed-payments-summary h3 {
+  margin: 0 0 1rem 0;
+  color: #ffffff !important;
+}
+
+.failed-payments-summary .summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.failure-categories {
+  background: rgba(15, 23, 42, 0.8) !important;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.failure-categories h3 {
+  margin: 0 0 1rem 0;
+  color: #ffffff !important;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(30, 41, 59, 0.5) !important;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+.category-name {
+  color: #cbd5e1 !important;
+  text-transform: capitalize;
+}
+
+.category-count {
+  color: #f87171 !important;
+  font-weight: 600;
+}
+
+.recent-failures {
+  background: rgba(15, 23, 42, 0.8) !important;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.recent-failures h3 {
+  margin: 0 0 1rem 0;
+  color: #ffffff !important;
+}
+
+.category-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  background: rgba(248, 113, 113, 0.2) !important;
+  color: #f87171 !important;
+  border: 1px solid #f87171 !important;
+}
+
+.retryable-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.retryable-badge.yes {
+  background: rgba(74, 222, 128, 0.2) !important;
+  color: #4ade80 !important;
+  border: 1px solid #4ade80 !important;
+}
+
+.retryable-badge.no {
+  background: rgba(248, 113, 113, 0.2) !important;
+  color: #f87171 !important;
+  border: 1px solid #f87171 !important;
+}
+
+.error-message {
+  color: #fbbf24 !important;
+  font-size: 0.9rem;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
