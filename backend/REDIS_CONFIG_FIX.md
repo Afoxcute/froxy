@@ -145,3 +145,7 @@ The system will now:
 
 The queue system will only initialize when a valid Redis URL is provided, preventing the `ENOTFOUND` errors.
 
+
+
+
+
