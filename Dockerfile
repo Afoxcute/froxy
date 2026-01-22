@@ -14,7 +14,7 @@ RUN echo "=== After package.json copy ==="
 RUN ls -la
 
 # STEP 4 Install dependencies
-# RUN npm install
+RUN npm install
 
 # STEP 5 Copy backend directory
 COPY backend/ ./
