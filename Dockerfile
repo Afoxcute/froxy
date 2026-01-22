@@ -22,6 +22,9 @@ RUN ls -la
 RUN npm install --include=dev && \
     npm install dotenv
 
+# STEP 4.5 Clean Prisma cache to ensure fresh generation
+RUN rm -rf node_modules/.prisma || true
+
 # STEP 5 Fix permissions on node_modules binaries
 RUN echo "=== Fixing node_modules permissions ===" && \
     chmod -R 755 node_modules/.bin && \
@@ -30,12 +33,12 @@ RUN echo "=== Fixing node_modules permissions ===" && \
 # STEP 6 Copy backend directory (including prisma schema)
 COPY backend/ ./
 
-# STEP 6.5 Generate Prisma Client for the correct platform (debian/glibc)
-RUN echo "=== Generating Prisma Client ===" && \
-    rm -rf node_modules/.prisma node_modules/@prisma/client && \
-    npm install @prisma/client && \
+# STEP 6.5 Generate Prisma Client for Debian (linux-glibc)
+RUN echo "=== Generating Prisma Client for Debian ===" && \
     npx prisma generate && \
-    echo "✅ Prisma Client generated successfully"
+    echo "✅ Prisma Client generated successfully" && \
+    echo "=== Verifying Prisma binary ===" && \
+    ls -la node_modules/.prisma/client/libquery_engine-* || echo "No engine found"
 
 # STEP 7 Debug: Show final contents
 RUN echo "=== Final Contents ===" && \
