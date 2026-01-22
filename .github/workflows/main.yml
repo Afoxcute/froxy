@@ -77,15 +77,15 @@ jobs:
             echo "Verifying deployment..."
             sleep 10
             
-            if sudo docker ps | grep -q sear; then
+            if sudo docker ps | grep -q froxy; then
               echo "✅ Container is running successfully"
-              echo "Container ID: $(sudo docker ps -q -f name=sear)"
+              echo "Container ID: $(sudo docker ps -q -f name=froxy)"
               echo "Container logs:"
-              sudo docker logs --tail 20 sear
+              sudo docker logs --tail 20 froxy
             else
               echo "❌ Container failed to start"
               echo "Error logs:"
-              sudo docker logs sear
+              sudo docker logs froxy
               exit 1
             fi
             
@@ -98,7 +98,7 @@ jobs:
           username: ${{ env.HOST_USERNAME }}
           key: ${{ env.SSH_PRIVATE_KEY }}
           script: |
-            if sudo docker ps | grep -q sear; then
+            if sudo docker ps | grep -q froxy; then
               echo "Container Status: Running"
               echo "Container Details:"
               sudo docker inspect froxy --format='Status: {{.State.Status}} | Started At: {{.State.StartedAt}}'
