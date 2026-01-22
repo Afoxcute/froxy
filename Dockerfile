@@ -1,36 +1,28 @@
-# Use Node 20 Alpine
-FROM node:20-alpine AS base
+FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
-# Copy package files
-COPY backend/package*.json ./
+# STEP 1 Debug: Show build context contents
+RUN echo "=== Build Context Contents ==="
+RUN ls -la
 
-# Install dependencies (including devDeps for build step)
-RUN npm ci --include=dev
+# STEP 2 Copy package.json
+COPY backend/package.json ./
 
-# Copy source code
-COPY backend/ .
+# STEP 3 Debug: Show after package.json copy
+RUN echo "=== After package.json copy ==="
+RUN ls -la
 
-# Build TypeScript to JavaScript
-RUN npm run build
+# STEP 4 Install dependencies
+# RUN npm install
 
-# ---- Production stage ----
-FROM node:20-alpine AS production
+# STEP 5 Copy backend directory
+COPY backend/ ./
 
-WORKDIR /usr/src/app
-
-# Copy only production dependencies
-COPY backend/package*.json ./
-RUN npm ci --only=production
-
-# Copy built JS from previous stage
-COPY --from=base /usr/src/app/dist ./dist
-
-# Copy .env is NOT needed here — it will be mounted at runtime
-# But ensure your app can read from /usr/src/app/.env
+# STEP 6 Debug: Show final contents
+RUN echo "=== Final Contents ==="
+RUN ls -la
 
 EXPOSE 8080
 
-# Run the compiled JS
-CMD ["node", "dist/index.js"]
+CMD ["npm", "start"]
