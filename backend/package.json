@@ -32,7 +32,7 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "npx ts-node src/index.ts",
     "dev": "ts-node src/index.ts",
     "build": "tsc",
     "test:yakoa": "ts-node src/scripts/test-yakoa.ts",
